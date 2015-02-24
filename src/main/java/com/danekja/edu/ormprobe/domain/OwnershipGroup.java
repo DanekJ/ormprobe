@@ -1,21 +1,35 @@
 package com.danekja.edu.ormprobe.domain;
 
+import javax.persistence.*;
+
 /**
  * @author Jakub
  * @version 1.0
  * @created 20-II-2015 18:10:41
  */
+@Entity
+@DiscriminatorValue(value="GROUP")
 public class OwnershipGroup extends Ownership<Group> {
 
 	public OwnershipGroup(){
 
 	}
 
-	public void finalize() throws Throwable {
-		super.finalize();
-	}
+    @ManyToOne
+    @JoinColumn(name = "lowerId", foreignKey = @ForeignKey(value = ConstraintMode.NO_CONSTRAINT))
+    @Override
+    public Group getLower() {
+        return super.getLower();
+    }
 
-	public BigGroup getUpper(){
+    @Override
+    public void setLower(Group newVal) {
+        super.setLower(newVal);
+    }
+
+    @Transient
+	@Override
+    public BigGroup getUpper(){
 		return (BigGroup) super.getLower();
 	}
 
@@ -25,8 +39,8 @@ public class OwnershipGroup extends Ownership<Group> {
 	 * @param newVal
 	 */
 	public void setUpper(Group newVal){
-		if(upper instanceof BigGroup) {
-            super.setUpper(upper);
+		if(newVal instanceof BigGroup) {
+            super.setUpper(newVal);
         } else {
             throw new IllegalArgumentException("Only BigGroup can be the upper entity in OwnershipGroup relationship!");
         }

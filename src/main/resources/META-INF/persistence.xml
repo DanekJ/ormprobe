@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence xmlns="http://java.sun.com/xml/ns/persistence" version="2.0">
+
+    <persistence-unit name="JET"  transaction-type="RESOURCE_LOCAL">
+        <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+
+        <!--<class>com.danekja.edu.ormprobe.domain.BaseObject</class>-->
+        <!--<class>com.danekja.edu.ormprobe.domain.BigGroup</class>-->
+        <!--<class>com.danekja.edu.ormprobe.domain.Group</class>-->
+        <!--<class>com.danekja.edu.ormprobe.domain.Item</class>-->
+        <!--<class>com.danekja.edu.ormprobe.domain.Ownership</class>-->
+        <!--<class>com.danekja.edu.ormprobe.domain.OwnershipGroup</class>-->
+        <!--<class>com.danekja.edu.ormprobe.domain.OwnershipItem</class>-->
+
+        <properties>
+            <property name="hibernate.archive.autodetection" value="class"/>
+            <property name="hibernate.show_sql" value="true"/>
+            <property name="hibernate.format_sql" value="true"/>
+            <property name="hibernate.hbm2ddl.auto" value="create-drop"/>
+            <property name="openjpa.jdbc.SynchronizeMappings" value="buildSchema"/>
+
+            <property name="hibernate.connection.driver_class" value="com.mysql.jdbc.Driver"/>
+            <property name="hibernate.connection.password" value="jet"/>
+            <property name="hibernate.connection.username" value="jet"/>
+            <property name="hibernate.connection.url" value="jdbc:mysql://localhost:3306/jet_db"/>
+            <property name="hibernate.dialect" value="org.hibernate.dialect.MySQL5InnoDBDialect"/>
+
+            <property name="hibernate.validator.apply_to_ddl" value="true" />
+
+        </properties>
+    </persistence-unit>
+</persistence>
