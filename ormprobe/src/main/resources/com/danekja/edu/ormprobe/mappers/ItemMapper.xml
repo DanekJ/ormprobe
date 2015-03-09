@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.danekja.edu.ormprobe.mappers.ItemMapper">
+    <resultMap id="AllItems" type="com.danekja.edu.ormprobe.domain.Item">
+        <id property="id" column="id"/>
+        <result property="name" column="name"/>
+    </resultMap>
+
+    <select id="getAllItems" resultMap="AllItems">
+        SELECT id, "name" FROM jet.Item
+    </select>
+
+    <select id="getItemById" parameterType="int" resultType="com.danekja.edu.ormprobe.domain.Item">
+        SELECT id, "name" FROM jet.Item WHERE id=#{id}
+    </select>
+    
+    <delete id="deleteItemById" parameterType="int">
+        DELETE FROM jet.Item WHERE id=#{id}
+    </delete>
+
+    <insert id="insertItem" parameterType="com.danekja.edu.ormprobe.domain.Item">
+        INSERT INTO jet.Item ("name") VALUES (#{name})
+    </insert>
+
+    <update id="updateItem" parameterType="com.danekja.edu.ormprobe.domain.Item">
+        UPDATE jet.Item SET "name"=#{name} WHERE id=#{id}
+    </update>
+</mapper>

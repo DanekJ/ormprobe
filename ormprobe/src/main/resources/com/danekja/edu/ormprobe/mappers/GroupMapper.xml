@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.danekja.edu.ormprobe.mappers.GroupMapper">
+    <select id="getGroupById" parameterType="int" resultType="com.danekja.edu.ormprobe.domain.Group">
+        SELECT id, "name" FROM jet.group_table WHERE id=#{id}
+    </select>
+
+    <insert id="insertGroup" parameterType="com.danekja.edu.ormprobe.domain.Group">
+        INSERT INTO jet.group_table (name, DTYPE) VALUES (#{name},
+        <if test="isBigGroup()">"BIGGROUP"</if>)
+    </insert>
+    
+    <resultMap id="GroupResult" type="com.danekja.edu.ormprobe.domain.Group">
+        <id property="id" column="id"/>
+        <result property="name" column="name"/>
+        <discriminator javaType="int" column="DTYPE">
+            <case value="GROUP" resultMap="Group"/>
+            <case value="BIGGROUP" resultMap="BigGroup"/>
+        </discriminator>
+    </resultMap>
+    
+    <resultMap id="Group" type="com.danekja.edu.ormprobe.domain.Group">
+        <result property="id" column="id"/>
+        <result property="name" column="name"/>
+    </resultMap>
+    
+    <resultMap id="BigGroup" type="com.danekja.edu.ormprobe.domain.BigGroup">
+        <result property="id" column="id"/>
+        <result property="name" column="name"/>
+    </resultMap>
+
+    <select id="getAllGroups" resultMap="GroupResult">
+        SELECT id, "name", DTYPE FROM jet.group_table
+    </select>
+
+    <update id="update" parameterType="Group">
+        UPDATE jet.group_table SET "name" = #{name} WHERE id=#{id}
+    </update>
+
+    <delete id="delete" parameterType="int">
+        DELETE FROM jet.group_table WHERE id=#{id}
+    </delete>
+</mapper>

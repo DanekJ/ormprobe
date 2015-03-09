@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.danekja.edu.ormprobe.mappers.OwnershipMapper">
+    <resultMap id="AllItems" type="com.danekja.edu.ormprobe.domain.Ownership">
+        <id property="id" column="id"/>
+        <result property="upper" column="upper"/>
+        <result property="lower" column="lower_id"/>
+        <discriminator javaType="int" column="DTYPE">
+            <case value=""></case>
+        </discriminator>
+    </resultMap>
+
+    <select id="getAllOwnerships" resultMap="AllItems">
+        SELECT o.id, lower_id, ownershipType, upper_id FROM jet.Ownership o
+        INNER JOIN jet.group_table g ON o.upper_id = g.id
+        INNER JOIN jet.group_table lg ON o.DTYPE = 'Group' AND o.lower_id = lg.id
+        UNION ALL
+        SELECT o.id, lower_id, ownershipType, upper_id FROM jet.Ownership o
+        INNER JOIN jet.group_table g ON g.id = o.upper_id
+        INNER JOIN jet.Item i ON o.DTYPE = 'Item' AND o.lower_id = i.id
+    </select>
+
+    <insert id="insertOwnership" parameterType="com.danekja.edu.ormprobe.domain.Ownership">
+        INSERT INTO jet.Ownership () VALUES ()
+    </insert>
+</mapper>
