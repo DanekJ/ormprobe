@@ -15,4 +15,9 @@ public class OwnershipItem extends Ownership<Item> {
 		super.finalize();
 	}
 
+    @Override
+    public OwnershipType getOwnershipType(){
+        return OwnershipType.ITEM;
+    }
+
 }

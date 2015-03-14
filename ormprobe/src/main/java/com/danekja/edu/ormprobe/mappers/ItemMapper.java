@@ -1,6 +1,7 @@
 package com.danekja.edu.ormprobe.mappers;
 
 import com.danekja.edu.ormprobe.domain.Item;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -10,9 +11,9 @@ import java.util.List;
 public interface ItemMapper {
     public List<Item> getAllItems();
 
-    public Item getItemById(int id);
+    public Item getItemById(@Param ("id")Integer id);
 
-    public void deleteItemById(int id);
+    public void delete(@Param("id")Integer id);
 
     public void insertItem(Item item);
 

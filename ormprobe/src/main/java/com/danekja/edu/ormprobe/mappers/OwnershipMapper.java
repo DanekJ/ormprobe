@@ -1,6 +1,7 @@
 package com.danekja.edu.ormprobe.mappers;
 
 import com.danekja.edu.ormprobe.domain.Ownership;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -10,5 +11,9 @@ import java.util.List;
 public interface OwnershipMapper {
     public List<Ownership> getAllOwnerships();
 
-    public void insertOwnership();
+    public Ownership getOwnershipById(@Param("id")Integer id);
+
+    public void insertOwnership(Ownership o);
+
+    public void deleteOwnershipById(@Param("id")Integer id);
 }

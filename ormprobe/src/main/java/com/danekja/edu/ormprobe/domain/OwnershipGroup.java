@@ -32,4 +32,9 @@ public class OwnershipGroup extends Ownership<Group> {
         }
 	}
 
+    @Override
+    public OwnershipType getOwnershipType(){
+        return OwnershipType.GROUP;
+    }
+
 }

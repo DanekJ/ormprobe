@@ -2,26 +2,37 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.danekja.edu.ormprobe.mappers.OwnershipMapper">
-    <resultMap id="AllItems" type="com.danekja.edu.ormprobe.domain.Ownership">
+    <resultMap id="AllOwnerships" type="com.danekja.edu.ormprobe.domain.Ownership">
         <id property="id" column="id"/>
-        <result property="upper" column="upper"/>
-        <result property="lower" column="lower_id"/>
-        <discriminator javaType="int" column="DTYPE">
-            <case value=""></case>
+        <result property="upper" column="upper" typeHandler="org.apache.ibatis.type.EnumTypeHandler"/>
+        <result property="lower" column="lowerId" typeHandler="org.apache.ibatis.type.EnumTypeHandler"/>
+        <discriminator javaType="string" column="ownershipType">
+            <case value="GROUP" resultMap="OwnershipGroup"/>
+            <case value="ITEM" resultMap="OwnershipItem"/>
         </discriminator>
     </resultMap>
 
-    <select id="getAllOwnerships" resultMap="AllItems">
-        SELECT o.id, lower_id, ownershipType, upper_id FROM jet.Ownership o
-        INNER JOIN jet.group_table g ON o.upper_id = g.id
-        INNER JOIN jet.group_table lg ON o.DTYPE = 'Group' AND o.lower_id = lg.id
+    <resultMap id="OwnershipGroup" type="com.danekja.edu.ormprobe.domain.OwnershipGroup"/>
+    <resultMap id="OwnershipItem" type="com.danekja.edu.ormprobe.domain.OwnershipItem"/>
+    <delete id="deleteOwnershipById">
+        DELETE FROM Ownership WHERE id = #{id}
+    </delete>
+
+    <select id="getAllOwnerships" resultMap="AllOwnerships">
+        SELECT o.id, lowerId, ownershipType, upper_id FROM Ownership o
+        INNER JOIN group_table g ON o.upper_id = g.id
+        INNER JOIN group_table lg ON o.ownershipType = 'GROUP' AND o.lowerId = lg.id
         UNION ALL
-        SELECT o.id, lower_id, ownershipType, upper_id FROM jet.Ownership o
-        INNER JOIN jet.group_table g ON g.id = o.upper_id
-        INNER JOIN jet.Item i ON o.DTYPE = 'Item' AND o.lower_id = i.id
+        SELECT o.id, lowerId, ownershipType, upper_id FROM Ownership o
+        INNER JOIN group_table g ON g.id = o.upper_id
+        INNER JOIN Item i ON o.ownershipType = 'ITEM' AND o.lowerId = i.id
+    </select>
+
+    <select id="getOwnershipById" resultMap="AllOwnerships">
+        SELECT id, upper_id, lowerId, ownershipType FROM Ownership WHERE id = ${id}
     </select>
 
     <insert id="insertOwnership" parameterType="com.danekja.edu.ormprobe.domain.Ownership">
-        INSERT INTO jet.Ownership () VALUES ()
+        INSERT INTO Ownership (ownershipType, lowerId, upper_id) VALUES (#{ownershipType}, #{lower.id}, #{upper.id})
     </insert>
 </mapper>

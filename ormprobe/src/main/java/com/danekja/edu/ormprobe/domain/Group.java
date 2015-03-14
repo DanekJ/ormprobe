@@ -9,9 +9,15 @@ public class Group extends BaseObject {
 
 	private String name;
 
-	public Group(){
+    protected GroupType groupType;
 
+	public Group(){
+        this.groupType = GroupType.Group;
 	}
+
+    public GroupType getGroupType() {
+        return groupType;
+    }
 
 	public void finalize() throws Throwable {
 
@@ -33,7 +39,7 @@ public class Group extends BaseObject {
 	 * Returns true if the instance is of class BigGroup, false otherwise.
 	 */
 	public boolean isBigGroup(){
-		return false;
+		return this instanceof BigGroup;
 	}
 
 }

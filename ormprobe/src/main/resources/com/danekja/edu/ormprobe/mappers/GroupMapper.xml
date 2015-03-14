@@ -3,42 +3,36 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.danekja.edu.ormprobe.mappers.GroupMapper">
     <select id="getGroupById" parameterType="int" resultType="com.danekja.edu.ormprobe.domain.Group">
-        SELECT id, "name" FROM jet.group_table WHERE id=#{id}
+        SELECT id, name FROM group_table WHERE id=#{id}
     </select>
 
     <insert id="insertGroup" parameterType="com.danekja.edu.ormprobe.domain.Group">
-        INSERT INTO jet.group_table (name, DTYPE) VALUES (#{name},
-        <if test="isBigGroup()">"BIGGROUP"</if>)
+        INSERT INTO group_table (name, DTYPE) VALUES (#{name}, '${groupType}')
     </insert>
     
     <resultMap id="GroupResult" type="com.danekja.edu.ormprobe.domain.Group">
         <id property="id" column="id"/>
         <result property="name" column="name"/>
-        <discriminator javaType="int" column="DTYPE">
-            <case value="GROUP" resultMap="Group"/>
-            <case value="BIGGROUP" resultMap="BigGroup"/>
+        <discriminator javaType="string" column="DTYPE">
+            <case value="Group" resultMap="Group"/>
+            <case value="BigGroup" resultMap="BigGroup"/>
         </discriminator>
     </resultMap>
     
-    <resultMap id="Group" type="com.danekja.edu.ormprobe.domain.Group">
-        <result property="id" column="id"/>
-        <result property="name" column="name"/>
-    </resultMap>
+    <resultMap id="Group" type="com.danekja.edu.ormprobe.domain.Group"/>
     
-    <resultMap id="BigGroup" type="com.danekja.edu.ormprobe.domain.BigGroup">
-        <result property="id" column="id"/>
-        <result property="name" column="name"/>
-    </resultMap>
+    <resultMap id="BigGroup" type="com.danekja.edu.ormprobe.domain.BigGroup" />
 
     <select id="getAllGroups" resultMap="GroupResult">
-        SELECT id, "name", DTYPE FROM jet.group_table
+        SELECT id, name, DTYPE FROM group_table
     </select>
 
     <update id="update" parameterType="Group">
-        UPDATE jet.group_table SET "name" = #{name} WHERE id=#{id}
+        UPDATE group_table SET name = #{name}, DTYPE = "${groupType}" WHERE id=#{id}
     </update>
 
     <delete id="delete" parameterType="int">
-        DELETE FROM jet.group_table WHERE id=#{id}
+        DELETE FROM Ownership WHERE ((lowerId = #{id} AND ownershipType="GROUP") OR upper_id = #{id} ) AND id > 0;
+        DELETE FROM group_table WHERE id = #{id};
     </delete>
 </mapper>

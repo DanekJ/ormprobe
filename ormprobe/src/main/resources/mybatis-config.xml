@@ -21,5 +21,6 @@
     <mappers>
         <mapper resource="com/danekja/edu/ormprobe/mappers/GroupMapper.xml" />
         <mapper resource="com/danekja/edu/ormprobe/mappers/ItemMapper.xml" />
+        <mapper resource="com/danekja/edu/ormprobe/mappers/OwnershipMapper.xml"/>
     </mappers>
 </configuration>

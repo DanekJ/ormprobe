@@ -8,7 +8,7 @@ package com.danekja.edu.ormprobe.domain;
 public class BigGroup extends Group {
 
 	public BigGroup(){
-
+        this.groupType = GroupType.BigGroup;
 	}
 
 	public void finalize() throws Throwable {
