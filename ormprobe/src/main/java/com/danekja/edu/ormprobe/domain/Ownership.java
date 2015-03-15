@@ -1,13 +1,29 @@
 package com.danekja.edu.ormprobe.domain;
 
+import javax.persistence.Column;
+import javax.persistence.DiscriminatorColumn;
+import javax.persistence.DiscriminatorType;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Transient;
+
 /**
  * @author Jakub
  * @version 1.0
  * @created 20-II-2015 18:10:41
  */
+
+@Entity
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name="ownershipType", discriminatorType = DiscriminatorType.STRING)
 public abstract class Ownership<T extends BaseObject> extends BaseObject {
 
-	private Group upper;
+	Group upper;
 	private T lower;
 	private Long lowerId;
 	private OwnershipType ownershipType;
@@ -20,6 +36,8 @@ public abstract class Ownership<T extends BaseObject> extends BaseObject {
 
 	}
 
+        @ManyToOne
+        @JoinColumn(nullable = true)
 	public Group getUpper(){
 		return upper;
 	}
@@ -32,6 +50,7 @@ public abstract class Ownership<T extends BaseObject> extends BaseObject {
 		upper = newVal;
 	}
 
+        @Transient
 	public T getLower(){
 		return lower;
 	}
@@ -44,6 +63,7 @@ public abstract class Ownership<T extends BaseObject> extends BaseObject {
 		lower = newVal;
 	}
 
+        @Transient
 	public Long getLowerId(){
 		return lowerId;
 	}
@@ -56,6 +76,8 @@ public abstract class Ownership<T extends BaseObject> extends BaseObject {
 		lowerId = newVal;
 	}
 
+        @Column(name = "ownershipType", nullable = false, insertable = false, updatable = false)
+        @Enumerated(EnumType.STRING)
 	public OwnershipType getOwnershipType(){
 		return ownershipType;
 	}
@@ -71,6 +93,7 @@ public abstract class Ownership<T extends BaseObject> extends BaseObject {
 	/**
 	 * Returns true when the ownership type is GROUP.
 	 */
+        @Transient
 	public boolean isGroup(){
 		return false;
 	}
@@ -78,6 +101,7 @@ public abstract class Ownership<T extends BaseObject> extends BaseObject {
 	/**
 	 * Returns true if the ownershipType is ITEM.
 	 */
+        @Transient
 	public boolean isItem(){
 		return false;
 	}

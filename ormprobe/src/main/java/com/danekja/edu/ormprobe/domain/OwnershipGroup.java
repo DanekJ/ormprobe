@@ -1,10 +1,19 @@
 package com.danekja.edu.ormprobe.domain;
 
+import javax.persistence.DiscriminatorValue;
+import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Transient;
+
 /**
  * @author Jakub
  * @version 1.0
  * @created 20-II-2015 18:10:41
  */
+
+@Entity
+@DiscriminatorValue(value="GROUP")
 public class OwnershipGroup extends Ownership<Group> {
 
 	public OwnershipGroup(){
@@ -15,6 +24,8 @@ public class OwnershipGroup extends Ownership<Group> {
 		super.finalize();
 	}
 
+        @Transient
+        @Override
 	public BigGroup getUpper(){
 		return (BigGroup) super.getLower();
 	}
@@ -24,12 +35,25 @@ public class OwnershipGroup extends Ownership<Group> {
 	 * 
 	 * @param newVal
 	 */
+        @Override
 	public void setUpper(Group newVal){
-		if(upper instanceof BigGroup) {
-            super.setUpper(upper);
+		if(newVal instanceof BigGroup) {
+            super.setUpper(newVal);
         } else {
             throw new IllegalArgumentException("Only BigGroup can be the upper entity in OwnershipGroup relationship!");
         }
 	}
+        
+        @ManyToOne
+        @JoinColumn(name="lowerId")
+        @Override
+        public Group getLower() {
+            return super.getLower();
+        }
+
+        @Override
+        public void setLower(Group newVal) {
+            super.setLower(newVal);
+        }        
 
 }
