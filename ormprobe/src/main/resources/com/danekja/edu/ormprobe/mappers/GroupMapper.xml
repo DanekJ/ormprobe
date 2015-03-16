@@ -27,7 +27,7 @@
         SELECT id, name, DTYPE FROM group_table
     </select>
 
-    <update id="update" parameterType="Group">
+    <update id="update" parameterType="com.danekja.edu.ormprobe.domain.Group">
         UPDATE group_table SET name = #{name}, DTYPE = "${groupType}" WHERE id=#{id}
     </update>
 

@@ -2,34 +2,73 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.danekja.edu.ormprobe.mappers.OwnershipMapper">
+    <resultMap id="Lower" type="com.danekja.edu.ormprobe.domain.BaseObject">
+        <id property="id" column="lowerId"/>
+        <discriminator javaType="string" column="ownershipType">
+            <case value="GROUP" resultMap="RegularGroup"/>
+            <case value="ITEM" resultMap="Item"/>
+        </discriminator>
+    </resultMap>
+
+    <resultMap id="UpperGroup" type="com.danekja.edu.ormprobe.domain.Group">
+        <id property="id" column="upper"/>
+        <result property="name" column="name"/>
+        <result property="groupType" column="upper_type"/>
+        <discriminator javaType="string" column="upper_type">
+            <case value="Group" resultMap="RegularGroup"/>
+            <case value="BigGroup" resultMap="BigGroup"/>
+        </discriminator>
+    </resultMap>
+
     <resultMap id="AllOwnerships" type="com.danekja.edu.ormprobe.domain.Ownership">
         <id property="id" column="id"/>
-        <result property="upper" column="upper" typeHandler="org.apache.ibatis.type.EnumTypeHandler"/>
-        <result property="lower" column="lowerId" typeHandler="org.apache.ibatis.type.EnumTypeHandler"/>
+        <result property="lowerId" column="lowerId"/>
+        <result property="ownershipType" column="ownershipType"/>
+        <association property="lower" resultMap="Lower"/>
+        <association property="upper" resultMap="UpperGroup"/>
         <discriminator javaType="string" column="ownershipType">
             <case value="GROUP" resultMap="OwnershipGroup"/>
             <case value="ITEM" resultMap="OwnershipItem"/>
         </discriminator>
     </resultMap>
 
-    <resultMap id="OwnershipGroup" type="com.danekja.edu.ormprobe.domain.OwnershipGroup"/>
-    <resultMap id="OwnershipItem" type="com.danekja.edu.ormprobe.domain.OwnershipItem"/>
+    <resultMap id="RegularGroup" type="com.danekja.edu.ormprobe.domain.Group">
+        <id column="lowerId" property="id"/>
+        <result property="name" column="group_name"/>
+    </resultMap>
+
+    <resultMap id="Item" type="com.danekja.edu.ormprobe.domain.Item">
+        <id column="lowerId" property="id"/>
+        <result property="name" column="item_name"/>
+    </resultMap>
+
+    <resultMap id="BigGroup" type="com.danekja.edu.ormprobe.domain.BigGroup"/>
+
+    <resultMap id="OwnershipGroup" type="com.danekja.edu.ormprobe.domain.OwnershipGroup" extends="AllOwnerships"/>
+    <resultMap id="OwnershipItem" type="com.danekja.edu.ormprobe.domain.OwnershipItem" extends="AllOwnerships"/>
+
     <delete id="deleteOwnershipById">
         DELETE FROM Ownership WHERE id = #{id}
     </delete>
 
+    <sql id="select">
+        SELECT o.id, lowerId, ownershipType, upper_id AS upper, g.name AS group_name, i.name AS item_name, gu.name AS name, gu.DTYPE AS upper_type
+        FROM Ownership o
+        JOIN group_table gu
+        ON gu.id = o.upper_id
+        LEFT OUTER JOIN group_table g
+        ON g.id = o.lowerId AND ownershipType = "GROUP"
+        LEFT OUTER JOIN Item i
+        ON i.id = o.lowerId AND ownershipType = "ITEM"
+    </sql>
+
     <select id="getAllOwnerships" resultMap="AllOwnerships">
-        SELECT o.id, lowerId, ownershipType, upper_id FROM Ownership o
-        INNER JOIN group_table g ON o.upper_id = g.id
-        INNER JOIN group_table lg ON o.ownershipType = 'GROUP' AND o.lowerId = lg.id
-        UNION ALL
-        SELECT o.id, lowerId, ownershipType, upper_id FROM Ownership o
-        INNER JOIN group_table g ON g.id = o.upper_id
-        INNER JOIN Item i ON o.ownershipType = 'ITEM' AND o.lowerId = i.id
+      <include refid="select"/>
     </select>
 
     <select id="getOwnershipById" resultMap="AllOwnerships">
-        SELECT id, upper_id, lowerId, ownershipType FROM Ownership WHERE id = ${id}
+        <include refid="select"/>
+        WHERE o.id = #{id}
     </select>
 
     <insert id="insertOwnership" parameterType="com.danekja.edu.ormprobe.domain.Ownership">
