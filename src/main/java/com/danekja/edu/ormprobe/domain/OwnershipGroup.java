@@ -11,9 +11,9 @@ import javax.persistence.*;
 @DiscriminatorValue(value="GROUP")
 public class OwnershipGroup extends Ownership<Group> {
 
-	public OwnershipGroup(){
+    public OwnershipGroup(){
 
-	}
+    }
 
     @ManyToOne
     @JoinColumn(name = "lowerId", foreignKey = @ForeignKey(value = ConstraintMode.NO_CONSTRAINT))
@@ -28,22 +28,22 @@ public class OwnershipGroup extends Ownership<Group> {
     }
 
     @Transient
-	@Override
+    @Override
     public BigGroup getUpper(){
-		return (BigGroup) super.getLower();
+		return (BigGroup) super.getUpper();
 	}
 
-	/**
-	 * Implementation must ensure the newVal parameter is of type BigGroup.
-	 * 
-	 * @param newVal
-	 */
-	public void setUpper(Group newVal){
-		if(newVal instanceof BigGroup) {
+    /**
+    * Implementation must ensure the newVal parameter is of type BigGroup.
+    *
+    * @param newVal
+    */
+    public void setUpper(Group newVal){
+        if(newVal instanceof BigGroup) {
             super.setUpper(newVal);
         } else {
             throw new IllegalArgumentException("Only BigGroup can be the upper entity in OwnershipGroup relationship!");
         }
-	}
+    }
 
 }
