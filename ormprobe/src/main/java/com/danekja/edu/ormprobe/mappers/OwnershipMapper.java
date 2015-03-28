@@ -9,11 +9,11 @@ import java.util.List;
  * Created by witz on 7.3.15.
  */
 public interface OwnershipMapper {
-    public List<Ownership> getAllOwnerships();
+    public List<Ownership> getAll();
 
-    public Ownership getOwnershipById(@Param("id")Integer id);
+    public Ownership getById(@Param("id") Integer id);
 
-    public void insertOwnership(Ownership o);
+    public void insert(Ownership o);
 
-    public void deleteOwnershipById(@Param("id")Integer id);
+    public void delete(@Param("id") Integer id);
 }

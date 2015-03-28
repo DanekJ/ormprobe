@@ -9,11 +9,11 @@ import java.util.List;
  * Created by witz on 6.3.15.
  */
 public interface GroupMapper {
-    public void insertGroup(Group item);
+    public void insert(Group item);
 
-    public Group getGroupById(@Param ("id")Integer id);
+    public Group getById(@Param("id") Integer id);
 
-    public List<Group> getAllGroups();
+    public List<Group> getAll();
 
     public void update(Group item);
 

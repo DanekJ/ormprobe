@@ -7,11 +7,11 @@
         <result property="name" column="name"/>
     </resultMap>
 
-    <select id="getAllItems" resultMap="AllItems">
+    <select id="getAll" resultMap="AllItems">
         SELECT id, name FROM Item
     </select>
 
-    <select id="getItemById" parameterType="int" resultType="com.danekja.edu.ormprobe.domain.Item">
+    <select id="getById" parameterType="int" resultType="com.danekja.edu.ormprobe.domain.Item">
         SELECT id, name FROM Item WHERE id=#{id}
     </select>
     
@@ -20,11 +20,11 @@
         DELETE FROM Item WHERE id=#{id};
     </delete>
 
-    <insert id="insertItem" parameterType="com.danekja.edu.ormprobe.domain.Item">
+    <insert id="insert" parameterType="com.danekja.edu.ormprobe.domain.Item">
         INSERT INTO Item (name) VALUES (#{name})
     </insert>
 
-    <update id="updateItem" parameterType="com.danekja.edu.ormprobe.domain.Item">
+    <update id="update" parameterType="com.danekja.edu.ormprobe.domain.Item">
         UPDATE Item SET name=#{name} WHERE id=#{id}
     </update>
 </mapper>

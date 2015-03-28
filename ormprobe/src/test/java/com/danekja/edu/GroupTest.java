@@ -49,7 +49,7 @@ public class GroupTest
 
     public void testSelectAll()
     {
-        List<Group> groups = gs.getAllGroups();
+        List<Group> groups = gs.getAll();
         assertNotNull(groups);
         assertTrue(groups.size() > 0);
     }
@@ -59,37 +59,37 @@ public class GroupTest
      */
     public void testGroupInsertion()
     {
-        List<Group> groups = gs.getAllGroups();
+        List<Group> groups = gs.getAll();
         int size = groups.size();
 
         Group g = new BigGroup();
         g.setName("Fuu");
-        gs.insertGroup(g);
+        gs.insert(g);
 
-        groups = gs.getAllGroups();
+        groups = gs.getAll();
         assertTrue(groups.size() - size == 1);
     }
 
     public void testSelectById()
     {
-        Group g = gs.getGroupById(1);
+        Group g = gs.getById(1);
         assertNotNull(g);
         assertTrue(g.getName().equals("Fuu"));
     }
 
     public void testUpdate()
     {
-        Group g = gs.getGroupById(1);
+        Group g = gs.getById(1);
         g.setName("new");
         gs.update(g);
-        g = gs.getGroupById(1);
+        g = gs.getById(1);
         assertEquals("new", g.getName());
     }
 
     public void testDeleteById()
     {
         gs.delete(1);
-        Group g = gs.getGroupById(1);
+        Group g = gs.getById(1);
         assertNull(g);
     }
 }

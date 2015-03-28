@@ -1,6 +1,5 @@
 package com.danekja.edu;
 
-import com.danekja.edu.ormprobe.domain.Group;
 import com.danekja.edu.ormprobe.domain.Ownership;
 import com.danekja.edu.ormprobe.domain.OwnershipItem;
 import com.danekja.edu.ormprobe.service.GroupService;
@@ -41,14 +40,14 @@ public class OwnershipTest extends TestCase {
 
     public void testGetAll()
     {
-        List<Ownership> ownerships = os.getAllOwnerships();
+        List<Ownership> ownerships = os.getAll();
         assertNotNull(ownerships);
         assertFalse(ownerships.isEmpty());
     }
 
     public void testGetById()
     {
-        Ownership o = os.getOwnershipById(1);
+        Ownership o = os.getById(1);
         assertNotNull(o);
         assertEquals(1l, o.id);
     }
@@ -56,17 +55,17 @@ public class OwnershipTest extends TestCase {
     public void testInsert()
     {
         Ownership o = new OwnershipItem();
-        List<Ownership> list = os.getAllOwnerships();
-        o.setUpper(new GroupService().getGroupById(1));
-        o.setLower(new ItemService().getItemById(1));
-        os.insertOwnership(o);
-        assertEquals(list.size() + 1, os.getAllOwnerships().size());
+        List<Ownership> list = os.getAll();
+        o.setUpper(new GroupService().getById(1));
+        o.setLower(new ItemService().getById(1));
+        os.insert(o);
+        assertEquals(list.size() + 1, os.getAll().size());
     }
 
     public void testDelete()
     {
-        List<Ownership> list = os.getAllOwnerships();
-        os.deleteOwnershipById(1);
-        assertEquals(list.size() - 1, os.getAllOwnerships().size());
+        List<Ownership> list = os.getAll();
+        os.delete(1);
+        assertEquals(list.size() - 1, os.getAll().size());
     }
 }

@@ -47,7 +47,7 @@
     <resultMap id="OwnershipGroup" type="com.danekja.edu.ormprobe.domain.OwnershipGroup" extends="AllOwnerships"/>
     <resultMap id="OwnershipItem" type="com.danekja.edu.ormprobe.domain.OwnershipItem" extends="AllOwnerships"/>
 
-    <delete id="deleteOwnershipById">
+    <delete id="delete">
         DELETE FROM Ownership WHERE id = #{id}
     </delete>
 
@@ -62,16 +62,16 @@
         ON i.id = o.lowerId AND ownershipType = "ITEM"
     </sql>
 
-    <select id="getAllOwnerships" resultMap="AllOwnerships">
+    <select id="getAll" resultMap="AllOwnerships">
       <include refid="select"/>
     </select>
 
-    <select id="getOwnershipById" resultMap="AllOwnerships">
+    <select id="getById" resultMap="AllOwnerships">
         <include refid="select"/>
         WHERE o.id = #{id}
     </select>
 
-    <insert id="insertOwnership" parameterType="com.danekja.edu.ormprobe.domain.Ownership">
+    <insert id="insert" parameterType="com.danekja.edu.ormprobe.domain.Ownership">
         INSERT INTO Ownership (ownershipType, lowerId, upper_id) VALUES (#{ownershipType}, #{lower.id}, #{upper.id})
     </insert>
 </mapper>

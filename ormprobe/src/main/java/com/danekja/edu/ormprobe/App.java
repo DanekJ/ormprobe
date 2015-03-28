@@ -1,9 +1,7 @@
 package com.danekja.edu.ormprobe;
 
-import com.danekja.edu.ormprobe.domain.Ownership;
-import com.danekja.edu.ormprobe.service.OwnershipService;
-
-import java.util.List;
+import com.danekja.edu.ormprobe.utils.DataGenerator;
+import com.danekja.edu.ormprobe.utils.MyBatisPersistUtil;
 
 /**
  * Hello world!
@@ -13,8 +11,8 @@ public class App
 {
     public static void main( String[] args )
     {
-        OwnershipService os = new OwnershipService();
-        Ownership o = os.getAllOwnerships().get(0);
-        System.out.println(o.getUpper());
+        MyBatisPersistUtil pu = new MyBatisPersistUtil();
+        DataGenerator dg = new DataGenerator(pu);
+        dg.generateData(true);
     }
 }

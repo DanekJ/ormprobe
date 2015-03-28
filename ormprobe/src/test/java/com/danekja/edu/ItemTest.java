@@ -37,38 +37,38 @@ public class ItemTest extends TestCase {
 
     public void testSelectAll()
     {
-        List<Item> list = is.getAllItems();
+        List<Item> list = is.getAll();
         assertNotNull(list);
         assertTrue(list.size() > 0);
     }
 
     public void testSelectById()
     {
-        Item item = is.getItemById(1);
+        Item item = is.getById(1);
         assertNotNull(item);
         assertEquals("Bar", item.getName());
     }
 
     public void testInsert()
     {
-        List<Item> items = is.getAllItems();
+        List<Item> items = is.getAll();
         Item item = new Item();
         item.setName("Item1");
-        is.insertItem(item);
-        assertTrue(items.size() + 1 == is.getAllItems().size());
+        is.insert(item);
+        assertTrue(items.size() + 1 == is.getAll().size());
     }
 
     public void testUpdate()
     {
-        Item item = is.getItemById(1);
+        Item item = is.getById(1);
         item.setName("Renamed");
-        item = is.getItemById(1);
+        item = is.getById(1);
         assertEquals("Renamed", item.getName());
     }
 
     public void testDelete()
     {
         is.delete(1);
-        assertNull(is.getItemById(1));
+        assertNull(is.getById(1));
     }
 }

@@ -2,11 +2,11 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.danekja.edu.ormprobe.mappers.GroupMapper">
-    <select id="getGroupById" parameterType="int" resultType="com.danekja.edu.ormprobe.domain.Group">
+    <select id="getById" parameterType="int" resultType="com.danekja.edu.ormprobe.domain.Group">
         SELECT id, name FROM group_table WHERE id=#{id}
     </select>
 
-    <insert id="insertGroup" parameterType="com.danekja.edu.ormprobe.domain.Group">
+    <insert id="insert" parameterType="com.danekja.edu.ormprobe.domain.Group">
         INSERT INTO group_table (name, DTYPE) VALUES (#{name}, '${groupType}')
     </insert>
     
@@ -23,7 +23,7 @@
     
     <resultMap id="BigGroup" type="com.danekja.edu.ormprobe.domain.BigGroup" />
 
-    <select id="getAllGroups" resultMap="GroupResult">
+    <select id="getAll" resultMap="GroupResult">
         SELECT id, name, DTYPE FROM group_table
     </select>
 

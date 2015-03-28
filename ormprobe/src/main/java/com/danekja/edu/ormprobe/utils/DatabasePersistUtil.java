@@ -1,0 +1,40 @@
+package com.danekja.edu.ormprobe.utils;
+
+import com.danekja.edu.ormprobe.domain.BaseObject;
+
+/**
+ * Created by witz on 28.3.15.
+ */
+public interface DatabasePersistUtil {
+    /**
+     * Method do all stuffs needed for upcoming database inserts
+     */
+    void beginTransaction();
+
+    /**
+     * Method will persist data to database
+     * @param object - persisting record
+     */
+    void persistData(BaseObject object);
+
+
+    /**
+     * Method will commit all changes to database
+     */
+    void commitChanges();
+
+
+    /**
+     * Method will end all stuffs which were needed for transaction and the database connection will be end too
+     */
+    void endConnection();
+
+
+    /**
+     * Return object from database according to parameter id
+     * @param clazz - "table" of wanted object
+     * @param id - identifier of wanted object
+     * @return - instance of BaseObject
+     */
+    BaseObject selectObjectById(Class clazz, Long id);
+}
