@@ -74,4 +74,12 @@
     <insert id="insert" parameterType="com.danekja.edu.ormprobe.domain.Ownership">
         INSERT INTO Ownership (ownershipType, lowerId, upper_id) VALUES (#{ownershipType}, #{lower.id}, #{upper.id})
     </insert>
+
+    <select id="isConnectedToBigGroup" resultType="boolean">
+        SELECT
+        CASE WHEN count(DISTINCT o2.id) > 0 then 'true' else 'false' end row_exists
+        FROM Item i, Ownership o1, Ownership o2
+        WHERE (o2.ownershipType = 'Item' AND o2.lowerId = ${itemId} AND o2.upper_id = ${bigGroupId})
+        OR (o1.upper_id = ${bigGroupId} AND o1.lowerId = o2.upper_id AND o1.ownershipType = 'GROUP' AND o2.lowerId = ${itemId})
+    </select>
 </mapper>

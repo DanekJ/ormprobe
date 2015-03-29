@@ -35,4 +35,15 @@
         DELETE FROM Ownership WHERE ((lowerId = #{id} AND ownershipType="GROUP") OR upper_id = #{id} ) AND id > 0;
         DELETE FROM group_table WHERE id = #{id};
     </delete>
+
+    <select id="listOwnershipCandidates" parameterType="int" resultMap="GroupResult">
+        SELECT g.* FROM group_table g, Ownership o
+        WHERE NOT g.DTYPE = 'BigGroup' AND NOT (o.upper_id = ${id} AND o.lowerId = g.id) AND o.ownershipType = 'GROUP' AND NOT g.id = ${id}
+    </select>
+    
+    <select id="listItemsBigGroups" parameterType="int" resultMap="BigGroup">
+        SELECT DISTINCT gt.* FROM Item i, Ownership o1, Ownership o2, group_table gt
+        WHERE (gt.id = o2.upper_id AND gt.DTYPE = 'BigGroup' AND o2.ownershipType = 'Item' AND o2.lowerId = ${id})
+	    OR (gt.id = o1.upper_id AND gt.DTYPE = 'BigGroup' AND o1.lowerId = o2.upper_id AND o1.ownershipType = "GROUP" AND o2.lowerId = ${id})
+    </select>
 </mapper>

@@ -16,4 +16,6 @@ public interface OwnershipMapper {
     public void insert(Ownership o);
 
     public void delete(@Param("id") Integer id);
+
+    public boolean isConnectedToBigGroup(@Param("bigGroupId")Integer bigGroupId, @Param("itemId")Integer itemId);
 }

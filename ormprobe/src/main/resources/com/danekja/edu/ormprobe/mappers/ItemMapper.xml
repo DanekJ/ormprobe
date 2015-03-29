@@ -27,4 +27,10 @@
     <update id="update" parameterType="com.danekja.edu.ormprobe.domain.Item">
         UPDATE Item SET name=#{name} WHERE id=#{id}
     </update>
+
+    <select id="listBigGroupsItems" resultMap="AllItems">
+        SELECT DISTINCT i.* FROM Item i, Ownership o1, Ownership o2, group_table gt
+        WHERE (gt.id = ${id} AND gt.DTYPE = 'BigGroup' AND gt.id = o2.upper_id AND o2.ownershipType = 'Item' AND o2.lowerId = i.id)
+	    OR (gt.id = ${id} AND gt.DTYPE = 'BigGroup' AND gt.id = o1.upper_id AND o1.lowerId = o2.upper_id AND o1.ownershipType = 'GROUP' AND o1.lowerId = i.id)
+    </select>
 </mapper>
