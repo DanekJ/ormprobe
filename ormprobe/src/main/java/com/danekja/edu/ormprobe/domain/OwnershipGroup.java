@@ -16,7 +16,7 @@ public class OwnershipGroup extends Ownership<Group> {
 	}
 
 	public BigGroup getUpper(){
-		return (BigGroup) super.getLower();
+		return (BigGroup) super.getUpper();
 	}
 
 	/**
