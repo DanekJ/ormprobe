@@ -15,12 +15,10 @@ public class JPAPersistUtil implements DatabasePersistUtil {
 	private EntityManagerFactory emf;
 	private EntityManager em;
 
-
-	public JPAPersistUtil(EntityManagerFactory emf) {
+	public JPAPersistUtil(EntityManagerFactory emf, EntityManager em) {
 		this.emf = emf;
-		this.em = emf.createEntityManager();
+		this.em = em;
 	}
-
 
 	/**
 	 * Method do all stuffs needed for upcoming database inserts

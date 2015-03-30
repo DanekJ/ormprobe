@@ -1,24 +1,30 @@
 package com.danekja.edu.ormprobe.dao;
 
-import com.danekja.edu.ormprobe.domain.BigGroup;
-import com.danekja.edu.ormprobe.domain.Group;
-import com.danekja.edu.ormprobe.domain.Item;
-import com.danekja.edu.ormprobe.domain.OwnershipItem;
+import com.danekja.edu.ormprobe.domain.*;
 
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
+import javax.persistence.metamodel.EntityType;
+import javax.persistence.metamodel.Metamodel;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 /**
  * @author Karel Zíbar
  */
-public class DaoTesterWithStringQueries extends DaoTester{
+public class DaoTesterWithCriteriaQueries extends DaoTester{
+	CriteriaBuilder builder;
+	Metamodel model;
 
 
-
-	public DaoTesterWithStringQueries(EntityManagerFactory emf) {
+	public DaoTesterWithCriteriaQueries(EntityManagerFactory emf) {
 		super(emf);
+		builder = this.em.getCriteriaBuilder();
+		model = this.em.getMetamodel();
 	}
 
 
@@ -30,7 +36,26 @@ public class DaoTesterWithStringQueries extends DaoTester{
 	 */
 	@Override
 	public Set<Group> listOwnershipCandidates(long bigGroupId) {
-		return null;
+		CriteriaQuery<Group> cq = builder.createQuery(Group.class);
+		Root group = cq.from(Group.class);
+		Root ownershipGroup = cq.from(OwnershipGroup.class);
+
+		cq.select(group);
+		cq.where(
+			builder.and(
+				builder.equal(ownershipGroup.get("upper_id"), bigGroupId),
+				builder.equal(ownershipGroup.get("lower_id"), group.get("id"))
+			)
+		);
+
+
+		TypedQuery<Group> query = this.em.createQuery(cq);
+		List<Group> results = query.getResultList();
+
+		for (int i = 0; i < results.size(); i++) {
+			System.out.println(results.get(i));
+		}
+		return new HashSet<Group>(results);
 	}
 
 	/**
@@ -58,16 +83,19 @@ public class DaoTesterWithStringQueries extends DaoTester{
 	 */
 	@Override
 	public boolean isConnectedToBigGroup(long bigGroupId, long itemId) {
-		boolean ret = false;
 
-		TypedQuery<OwnershipItem> iQuery = this.em.createQuery("SELECT oi FROM OwnershipItem oi " +
-				"WHERE oi.upper. oi.upper = ?1 AND oi.lower = ?2", OwnershipItem.class);
-		iQuery.setParameter(1, bigGroupId);
-		iQuery.setParameter(2, itemId);
-		List<OwnershipItem> list = iQuery.getResultList();
-		System.out.println("List size: " + list.size());
+		EntityType<OwnershipItem> OwnershipItem_ = model.entity(OwnershipItem.class);
+		CriteriaQuery<OwnershipItem> criteria = builder.createQuery(OwnershipItem.class);
+		Root<OwnershipItem> root = criteria.from(OwnershipItem.class);
+		criteria.select(root);
+//		criteria.where(builder.equal(root.get(OwnershipItem_.upper_id), bigGroupId));
 
-		return ret;
+		List<OwnershipItem> results = em.createQuery(criteria).getResultList();
+
+		if(!results.isEmpty()) return true;
+
+
+		return false;
 	}
 
 	/**

@@ -32,8 +32,16 @@ public class Item extends BaseObject {
 
 
 
-    public void finalize() throws Throwable {
+	public void finalize() throws Throwable {
 
-    }
+	}
 
+
+	@Override
+	public String toString() {
+		return "Item{" +
+				"id=" + id +
+				", name='" + name + '\'' +
+				'}';
+	}
 }

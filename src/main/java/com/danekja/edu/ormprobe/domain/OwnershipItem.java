@@ -16,7 +16,7 @@ public class OwnershipItem extends Ownership<Item> {
 	}
 
     @ManyToOne
-    @JoinColumn(name = "lowerId")
+    @JoinColumn(name = "lower_id")
     @Override
     public Item getLower() {
         return super.getLower();

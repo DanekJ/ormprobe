@@ -1,22 +1,21 @@
 package com.danekja.edu.ormprobe.dao;
 
-import com.danekja.edu.ormprobe.domain.BigGroup;
-import com.danekja.edu.ormprobe.domain.Group;
-import com.danekja.edu.ormprobe.domain.Item;
-import com.danekja.edu.ormprobe.domain.OwnershipItem;
+import com.danekja.edu.ormprobe.domain.*;
 
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.TypedQuery;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 /**
  * @author Karel Zíbar
  */
-public class DaoTesterWithCriteriaBuilder extends DaoTester{
+public class DaoTesterWithHQL extends DaoTester{
 
 
-	public DaoTesterWithCriteriaBuilder(EntityManagerFactory emf) {
+
+	public DaoTesterWithHQL(EntityManagerFactory emf) {
 		super(emf);
 	}
 
@@ -29,7 +28,17 @@ public class DaoTesterWithCriteriaBuilder extends DaoTester{
 	 */
 	@Override
 	public Set<Group> listOwnershipCandidates(long bigGroupId) {
-		return null;
+
+		TypedQuery<Group> query = em.createQuery(
+			"SELECT g FROM Group g WHERE " +
+				"g.id NOT IN (SELECT DISTINCT g2.id FROM OwnershipGroup og JOIN og.lower g2 WHERE og.upper.id = ?1)" +
+				" AND g.id NOT IN (SELECT DISTINCT bg FROM BigGroup bg)"
+			, Group.class);
+
+		query.setParameter(1, bigGroupId);
+
+		List<Group> groups = query.getResultList();
+		return new HashSet<Group>(groups);
 	}
 
 	/**
@@ -42,7 +51,15 @@ public class DaoTesterWithCriteriaBuilder extends DaoTester{
 	 */
 	@Override
 	public Set<BigGroup> listItemsBigGroups(long itemId) {
-		return null;
+		TypedQuery<BigGroup> query = em.createQuery(
+			"SELECT DISTINCT bg FROM BigGroup bg, OwnershipItem oi, OwnershipGroup og " +
+				"WHERE (bg.id = oi.upper.id AND oi.lower.id = :itemId) OR" +
+				"(bg.id = og.upper.id AND og.lower.id = oi.upper.id AND oi.lower.id = :itemId)", BigGroup.class);
+
+		query.setParameter("itemId", itemId);
+
+		List<BigGroup> bigGroups = query.getResultList();
+		return new HashSet<BigGroup>(bigGroups);
 	}
 
 	/**
@@ -57,7 +74,15 @@ public class DaoTesterWithCriteriaBuilder extends DaoTester{
 	 */
 	@Override
 	public boolean isConnectedToBigGroup(long bigGroupId, long itemId) {
-		return false;
+		TypedQuery<Ownership> gQuery = em.createQuery(
+			"SELECT DISTINCT og FROM BigGroup bg, OwnershipItem oi, OwnershipGroup og " +
+				"WHERE (oi.upper.id = :bgId AND oi.lower.id = :itemId) OR " +
+					"(og.upper.id = :bgId AND og.lower.id = oi.upper.id AND oi.lower.id = :itemId)", Ownership.class);
+		gQuery.setParameter("bgId", bigGroupId);
+		gQuery.setParameter("itemId", itemId);
+
+		List<Ownership> ogList = gQuery.getResultList();
+		return !ogList.isEmpty();
 	}
 
 	/**
@@ -70,6 +95,14 @@ public class DaoTesterWithCriteriaBuilder extends DaoTester{
 	 */
 	@Override
 	public Set<Item> listBigGroupsItems(long bigGroupId) {
-		return null;
+		TypedQuery<Item> query = em.createQuery(
+			"SELECT DISTINCT i FROM Item i, OwnershipGroup og, OwnershipItem oi " +
+				"WHERE (oi.upper.id = :bgId AND oi.lower.id = i.id) OR " +
+					"(og.upper.id = :bgId AND og.lower.id = oi.upper.id AND oi.lower.id = i.id) ", Item.class);
+
+		query.setParameter("bgId", bigGroupId);
+
+		List<Item> items = query.getResultList();
+		return new HashSet<Item>(items);
 	}
 }

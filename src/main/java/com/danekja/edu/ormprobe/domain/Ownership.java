@@ -13,62 +13,62 @@ import javax.persistence.*;
 public abstract class Ownership<T extends BaseObject> extends BaseObject {
 	private Group upper;
 	private T lower;
-    private Long lowerId;
+  private Long lowerId;
 	private OwnershipType ownershipType;
 
 	public Ownership(){
 
 	}
 
-    @ManyToOne
-    @JoinColumn(nullable = true)
+  @ManyToOne
+  @JoinColumn(nullable = true)
 	public Group getUpper(){
 		return upper;
 	}
 
 
-    @Transient
+  @Transient
 	public T getLower(){
 		return lower;
 	}
 
-    //@Column(name = "lower_id", insertable = false, updatable = false)
-    @Transient
+  //@Column(name = "lower_id", insertable = false, updatable = false)
+  @Transient
 	public Long getLowerId(){
 		return lowerId;
 	}
 
 
-    @Column(name = "ownershipType", nullable = false, insertable = false, updatable = false)
-    @Enumerated(EnumType.STRING)
+  @Column(name = "ownershipType", nullable = false, insertable = false, updatable = false)
+  @Enumerated(EnumType.STRING)
 	public OwnershipType getOwnershipType(){
 		return ownershipType;
 	}
 
 
-    /**
-     *
-     * @param newVal
-     */
-    public void setUpper(Group newVal){
-        upper = newVal;
-    }
+  /**
+   *
+   * @param newVal
+   */
+  public void setUpper(Group newVal){
+      upper = newVal;
+  }
 
-    /**
-     *
-     * @param lower
-     */
-    public void setLower(T lower) {
-        this.lower = lower;
-    }
+  /**
+   *
+   * @param lower
+   */
+  public void setLower(T lower) {
+      this.lower = lower;
+  }
 
 
 
-    /**
-     *
-     * @param newVal
-     */
-    public void setLowerId(Long newVal){
+  /**
+   *
+   * @param newVal
+   */
+  public void setLowerId(Long newVal){
         lowerId = newVal;
     }
 
@@ -84,7 +84,7 @@ public abstract class Ownership<T extends BaseObject> extends BaseObject {
 	/**
 	 * Returns true when the ownership type is GROUP.
 	 */
-    @Transient
+  @Transient
 	public boolean isGroup(){
 		return false;
 	}
@@ -92,10 +92,20 @@ public abstract class Ownership<T extends BaseObject> extends BaseObject {
 	/**
 	 * Returns true if the ownershipType is ITEM.
 	 */
-    @Transient
+  @Transient
 	public boolean isItem(){
 		return false;
 	}
 
 
+	@Override
+	public String toString() {
+		return "Ownership{" +
+			"id=" + id +
+			", upper=" + upper +
+			", lower=" + lower +
+			", lowerId=" + lowerId +
+			", ownershipType=" + ownershipType +
+			'}';
+	}
 }

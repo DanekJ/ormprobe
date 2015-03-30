@@ -30,4 +30,13 @@ public class Group extends BaseObject {
     public boolean isBigGroup() {
         return this instanceof BigGroup;
     }
+
+
+    @Override
+    public String toString() {
+        return "Group{" +
+          "id=" + id + ", " +
+          "name='" + name + '\'' +
+            '}';
+    }
 }

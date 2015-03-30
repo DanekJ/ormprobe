@@ -16,7 +16,7 @@ public class OwnershipGroup extends Ownership<Group> {
     }
 
     @ManyToOne
-    @JoinColumn(name = "lowerId", foreignKey = @ForeignKey(value = ConstraintMode.NO_CONSTRAINT))
+    @JoinColumn(name = "lower_id", foreignKey = @ForeignKey(value = ConstraintMode.NO_CONSTRAINT))
     @Override
     public Group getLower() {
         return super.getLower();
@@ -27,11 +27,12 @@ public class OwnershipGroup extends Ownership<Group> {
         super.setLower(newVal);
     }
 
-    @Transient
-    @Override
-    public BigGroup getUpper(){
-		return (BigGroup) super.getUpper();
-	}
+//    @Transient
+////    @JoinColumn(name = "upper")
+//    @Override
+//    public BigGroup getUpper(){
+//        return (BigGroup) super.getUpper();
+//      }
 
     /**
     * Implementation must ensure the newVal parameter is of type BigGroup.
