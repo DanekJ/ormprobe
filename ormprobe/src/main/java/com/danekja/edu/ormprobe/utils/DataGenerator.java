@@ -1,7 +1,8 @@
 package com.danekja.edu.ormprobe.utils;
 
-import java.util.Random;
 import com.danekja.edu.ormprobe.domain.*;
+
+import java.util.Random;
 
 /**
  * @author Karel Zíbar
@@ -27,20 +28,17 @@ public class DataGenerator {
 
 	public void generateData(boolean endConnection){
 
-            if(endConnection){
-		persistUtil.beginTransaction();
+			persistUtil.beginTransaction();
 
-		generateGroupsAndItems();
-		generateOwnerships();
-		persistUtil.commitChanges();
-                persistUtil.endConnection();
-            }
+			generateGroupsAndItems();
+			generateOwnerships();
+			persistUtil.commitChanges();
 
-	//	if(endConnection)
-			
-
+		if(endConnection){
+			persistUtil.endConnection();
+		}
 	}
-        
+
 	private void generateGroupsAndItems(){
 		Random random = new Random(1);
 		int randomChoise;
@@ -74,61 +72,61 @@ public class DataGenerator {
 		Group g = new Group();
 		Item i = new Item();
 		Long randomId;
-                int randomChoice;
+		int randomChoice;
 
 		for(int k = 0; k < OWNERSHIPS_COUNT; k++){
-                        randomChoice = roitems.nextInt(2) + 1;
-                        
-                        if(randomChoice == 1){
-                            OwnershipItem oi = new OwnershipItem();
-                            
-                            randomId = (long) roitems.nextInt(GROUPS_COUNT - 1 + 1) + 1;
-                            g = (Group) persistUtil.selectObjectById(Group.class, randomId);
-                            oi.setUpper(g);
-                            
-                            randomId = (long) roitems.nextInt(ITEMS_COUNT - 1 + 1) + 1;
-                            i = (Item) persistUtil.selectObjectById(Item.class, randomId);
-                            oi.setLower(i);
-                            
-                            persistUtil.persistData(oi);
-                        }
-                        
-                        else{
-                            OwnershipGroup og = new OwnershipGroup();
-                            
-                            randomId = (long) roitems.nextInt(GROUPS_COUNT - 1 + 1) + 1;
-                            g = (Group) persistUtil.selectObjectById(Group.class, randomId);
-                            
-                            if(g instanceof BigGroup){
-                                og.setUpper(g);
-                                
-                                randomId = (long) roitems.nextInt(GROUPS_COUNT - 1 + 1) + 1;
-                                g = (Group) persistUtil.selectObjectById(Group.class, randomId);
-                                
-                                while(g instanceof BigGroup){
-                                    randomId = (long) roitems.nextInt(GROUPS_COUNT - 1 + 1) + 1;
-                                    g = (Group) persistUtil.selectObjectById(Group.class, randomId);
-                                }
-                                
-                                og.setLower(g);
-                                persistUtil.persistData(og);
-                            }
-                            
-                            else{
-                                og.setLower(g);
-                                
-                                randomId = (long) roitems.nextInt(GROUPS_COUNT - 1 + 1) + 1;
-                                g = (Group) persistUtil.selectObjectById(Group.class, randomId);
-                                
-                                while(!(g instanceof BigGroup)){
-                                    randomId = (long) roitems.nextInt(GROUPS_COUNT - 1 + 1) + 1;
-                                    g = (Group) persistUtil.selectObjectById(Group.class, randomId);
-                                }
-                                
-                                og.setUpper(g);
-                                persistUtil.persistData(og);
-                            }
-                        }
+			randomChoice = roitems.nextInt(2) + 1;
+
+			if(randomChoice == 1){
+				OwnershipItem oi = new OwnershipItem();
+
+				randomId = (long) roitems.nextInt(GROUPS_COUNT - 1 + 1) + 1;
+				g = (Group) persistUtil.selectObjectById(Group.class, randomId);
+				oi.setUpper(g);
+
+				randomId = (long) roitems.nextInt(ITEMS_COUNT - 1 + 1) + 1;
+				i = (Item) persistUtil.selectObjectById(Item.class, randomId);
+				oi.setLower(i);
+
+				persistUtil.persistData(oi);
+			}
+
+			else{
+				OwnershipGroup og = new OwnershipGroup();
+
+				randomId = (long) roitems.nextInt(GROUPS_COUNT - 1 + 1) + 1;
+				g = (Group) persistUtil.selectObjectById(Group.class, randomId);
+
+				if(g instanceof BigGroup){
+					og.setUpper(g);
+
+					randomId = (long) roitems.nextInt(GROUPS_COUNT - 1 + 1) + 1;
+					g = (Group) persistUtil.selectObjectById(Group.class, randomId);
+
+					while(g instanceof BigGroup){
+						randomId = (long) roitems.nextInt(GROUPS_COUNT - 1 + 1) + 1;
+						g = (Group) persistUtil.selectObjectById(Group.class, randomId);
+					}
+
+					og.setLower(g);
+					persistUtil.persistData(og);
+				}
+
+				else{
+					og.setLower(g);
+
+					randomId = (long) roitems.nextInt(GROUPS_COUNT - 1 + 1) + 1;
+					g = (Group) persistUtil.selectObjectById(Group.class, randomId);
+
+					while(!(g instanceof BigGroup)){
+						randomId = (long) roitems.nextInt(GROUPS_COUNT - 1 + 1) + 1;
+						g = (Group) persistUtil.selectObjectById(Group.class, randomId);
+					}
+
+					og.setUpper(g);
+					persistUtil.persistData(og);
+				}
+			}
 		}
 	}
 
