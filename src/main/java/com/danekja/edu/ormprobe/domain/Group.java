@@ -1,10 +1,6 @@
 package com.danekja.edu.ormprobe.domain;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
-import javax.persistence.Transient;
-import java.lang.Long;
+import javax.persistence.*;
 
 /**
  * @author Jakub

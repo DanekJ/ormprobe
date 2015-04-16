@@ -32,10 +32,11 @@ public class DaoTesterWithHQL extends DaoTester{
 		TypedQuery<Group> query = em.createQuery(
 			"SELECT g FROM Group g WHERE " +
 				"g.id NOT IN (SELECT DISTINCT g2.id FROM OwnershipGroup og JOIN og.lower g2 WHERE og.upper.id = ?1)" +
-				" AND g.id NOT IN (SELECT DISTINCT bg FROM BigGroup bg)"
+				" AND g.class != ?2"
 			, Group.class);
 
 		query.setParameter(1, bigGroupId);
+		query.setParameter(2, BigGroup.class.getSimpleName());
 
 		List<Group> groups = query.getResultList();
 		return new HashSet<Group>(groups);

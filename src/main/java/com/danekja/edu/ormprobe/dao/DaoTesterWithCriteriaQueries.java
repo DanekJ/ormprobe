@@ -1,16 +1,17 @@
 package com.danekja.edu.ormprobe.dao;
 
-import com.danekja.edu.ormprobe.domain.*;
+import com.danekja.edu.ormprobe.domain.BigGroup;
+import com.danekja.edu.ormprobe.domain.Group;
+import com.danekja.edu.ormprobe.domain.Item;
+import com.danekja.edu.ormprobe.domain.OwnershipGroup;
+import org.hibernate.criterion.DetachedCriteria;
+import org.hibernate.criterion.Property;
+import org.hibernate.criterion.Restrictions;
 
 import javax.persistence.EntityManagerFactory;
-import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
-import javax.persistence.metamodel.EntityType;
 import javax.persistence.metamodel.Metamodel;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -36,25 +37,17 @@ public class DaoTesterWithCriteriaQueries extends DaoTester{
 	 */
 	@Override
 	public Set<Group> listOwnershipCandidates(long bigGroupId) {
-		CriteriaQuery<Group> cq = builder.createQuery(Group.class);
-		Root group = cq.from(Group.class);
-		Root ownershipGroup = cq.from(OwnershipGroup.class);
+		DetachedCriteria subquery = DetachedCriteria.forClass(OwnershipGroup.class, "og")
+			.createAlias("og.upper", "upper")
+			.add(Restrictions.eq("upper.id", bigGroupId))
+			.createAlias("og.lower", "lower")
+			.add(Restrictions.eqProperty("lower.id", "g.id"));
 
-		cq.select(group);
-		cq.where(
-			builder.and(
-				builder.equal(ownershipGroup.get("upper_id"), bigGroupId),
-				builder.equal(ownershipGroup.get("lower_id"), group.get("id"))
-			)
-		);
+		DetachedCriteria query = DetachedCriteria.forClass(Group.class, "g")
+			.add(Property.forName("g.id").notIn(subquery));
 
 
-		TypedQuery<Group> query = this.em.createQuery(cq);
-		List<Group> results = query.getResultList();
 
-		for (int i = 0; i < results.size(); i++) {
-			System.out.println(results.get(i));
-		}
 		return new HashSet<Group>(results);
 	}
 
@@ -83,18 +76,6 @@ public class DaoTesterWithCriteriaQueries extends DaoTester{
 	 */
 	@Override
 	public boolean isConnectedToBigGroup(long bigGroupId, long itemId) {
-
-		EntityType<OwnershipItem> OwnershipItem_ = model.entity(OwnershipItem.class);
-		CriteriaQuery<OwnershipItem> criteria = builder.createQuery(OwnershipItem.class);
-		Root<OwnershipItem> root = criteria.from(OwnershipItem.class);
-		criteria.select(root);
-//		criteria.where(builder.equal(root.get(OwnershipItem_.upper_id), bigGroupId));
-
-		List<OwnershipItem> results = em.createQuery(criteria).getResultList();
-
-		if(!results.isEmpty()) return true;
-
-
 		return false;
 	}
 
