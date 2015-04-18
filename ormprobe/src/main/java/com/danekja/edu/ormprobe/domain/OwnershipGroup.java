@@ -26,8 +26,8 @@ public class OwnershipGroup extends Ownership<Group> {
 
         @Transient
         @Override
-	public BigGroup getUpper(){
-		return (BigGroup) super.getLower();
+	public Group getUpper(){
+		return super.getUpper();
 	}
 
 	/**

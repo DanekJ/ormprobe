@@ -1,6 +1,8 @@
 package com.danekja.edu.ormprobe.domain;
 
+import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
+import javax.persistence.Table;
 import javax.persistence.Transient;
 
 /**
@@ -10,6 +12,8 @@ import javax.persistence.Transient;
  */
 
 @Entity
+@Table(name="group_table")
+@DiscriminatorValue("BigGroup")
 public class BigGroup extends Group {
 
 	public BigGroup(){

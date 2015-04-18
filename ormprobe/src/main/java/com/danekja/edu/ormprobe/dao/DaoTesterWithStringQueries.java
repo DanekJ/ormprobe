@@ -34,11 +34,10 @@ public class DaoTesterWithStringQueries extends DaoTester{
 	 */
 	@Override
 	public Set<Group> listOwnershipCandidates(long bigGroupId) {
-            Query iQuery = session.createQuery("SELECT DISTINCT g FROM Group g WHERE g NOT IN (SELECT og.lower FROM OwnershipGroup og WHERE og.upper.id = ?) AND g.class != ? ");
+            Query iQuery = session.createQuery("SELECT g FROM Group g WHERE g.id NOT IN "
+                    + "(SELECT DISTINCT g2.id FROM OwnershipGroup og JOIN og.lower g2 WHERE og.upper.id = ?) AND g.class != ?");
                 iQuery.setLong(0, bigGroupId);
-                iQuery.setString(1, BigGroup.class.getName().toString());
-                
-                String test = BigGroup.class.getName();
+                iQuery.setString(1, BigGroup.class.getSimpleName());
                 
 		Set<Group> groups = new HashSet<>(iQuery.list());
 		System.out.println("List size: " + groups.size());
@@ -55,9 +54,11 @@ public class DaoTesterWithStringQueries extends DaoTester{
 	 */
 	@Override
 	public Set<BigGroup> listItemsBigGroups(long itemId) {
-            Query iQuery = session.createQuery("SELECT DISTINCT g FROM Group g WHERE g IN (SELECT oi.upper FROM OwnershipItem oi WHERE oi.lower.id = ? AND oi.upper.class = 'BigGroup') OR g IN (SELECT og.upper FROM OwnershipGroup og WHERE og.lower IN (SELECT oi.upper FROM OwnershipItem oi WHERE oi.lower.id = ?))");
-                iQuery.setLong(0, itemId);
-                iQuery.setLong(1, itemId);
+            Query iQuery = session.createQuery("SELECT DISTINCT bg FROM BigGroup bg, OwnershipItem oi, OwnershipGroup og "
+                    + "WHERE (bg.id = oi.upper.id AND oi.lower.id = ?) OR (bg.id = og.upper.id AND "
+                    + "og.lower.id = oi.upper.id AND oi.lower.id = ?)");
+            iQuery.setLong(0, itemId);
+            iQuery.setLong(1, itemId);
                 
 		Set<BigGroup> groups = new HashSet<>(iQuery.list());
 		System.out.println("List size: " + groups.size());
@@ -76,10 +77,11 @@ public class DaoTesterWithStringQueries extends DaoTester{
 	 */
 	@Override
 	public boolean isConnectedToBigGroup(long bigGroupId, long itemId) {
-		Query iQuery = session.createQuery("SELECT oi FROM OwnershipItem oi WHERE (oi.upper IN (SELECT og.lower FROM OwnershipGroup og WHERE og.upper.id = ?) OR oi.upper.id = ?) AND oi.lower.id = ?");
-                iQuery.setLong(0, bigGroupId);
-                iQuery.setLong(1, bigGroupId);
-		iQuery.setLong(2, itemId);
+		Query iQuery = session.createQuery("SELECT DISTINCT og FROM BigGroup bg, OwnershipItem oi, OwnershipGroup og WHERE "
+                        + "(oi.upper.id = :bgId AND oi.lower.id = :itemId) OR (og.upper.id = :bgId AND og.lower.id = oi.upper.id "
+                        + "AND oi.lower.id = :itemId)");
+                iQuery.setParameter("bgId", bigGroupId);
+		iQuery.setParameter("itemId", itemId);
                 
 		List list = iQuery.list();
 		System.out.println("List size: " + list.size());
@@ -102,9 +104,8 @@ public class DaoTesterWithStringQueries extends DaoTester{
 	 */
 	@Override
 	public Set<Item> listBigGroupsItems(long bigGroupId) {
-            Query iQuery = session.createQuery("SELECT DISTINCT oi.lower FROM OwnershipItem oi WHERE oi.upper IN (SELECT og.lower FROM OwnershipGroup og WHERE og.upper.id = ?) OR oi.upper.id = ?");
-		iQuery.setLong(0, bigGroupId);
-                iQuery.setLong(1, bigGroupId);
+            Query iQuery = session.createQuery("SELECT DISTINCT i FROM Item i, OwnershipGroup og, OwnershipItem oi WHERE (oi.upper.id = :bgId AND oi.lower.id = i.id) OR (og.upper.id = :bgId AND og.lower.id = oi.upper.id AND oi.lower.id = i.id)");
+	        iQuery.setParameter("bgId", bigGroupId);
                 
 		Set<Item> items = new HashSet<>(iQuery.list());
 		System.out.println("List size: " + items.size());

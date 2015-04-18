@@ -3,6 +3,7 @@ package com.danekja.edu.ormprobe.utils;
 import com.danekja.edu.ormprobe.domain.BaseObject;
 import com.danekja.edu.ormprobe.domain.Group;
 import com.danekja.edu.ormprobe.domain.Item;
+import com.danekja.edu.ormprobe.domain.OwnershipItem;
 import java.util.List;
 
 import org.hibernate.Query;

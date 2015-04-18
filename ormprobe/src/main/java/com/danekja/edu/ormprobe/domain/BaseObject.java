@@ -14,16 +14,16 @@ import javax.persistence.MappedSuperclass;
 
 @MappedSuperclass
 public abstract class BaseObject {
-    private int id;
+    private Long id;
     
-    public void setId(int id){
+    public void setId(Long id){
         this.id = id;
     }
     
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(nullable = false)
-    public int getId(){
+    public Long getId(){
         return this.id;
     }
 }
