@@ -16,7 +16,7 @@ public class OwnershipGroup extends Ownership<Group> {
 	}
 
 	public BigGroup getUpper(){
-		return (BigGroup) super.getLower();
+		return (BigGroup) super.getUpper();
 	}
 
 	/**
@@ -25,11 +25,16 @@ public class OwnershipGroup extends Ownership<Group> {
 	 * @param newVal
 	 */
 	public void setUpper(Group newVal){
-		if(upper instanceof BigGroup) {
-            super.setUpper(upper);
+		if(newVal instanceof BigGroup) {
+            super.setUpper(newVal);
         } else {
             throw new IllegalArgumentException("Only BigGroup can be the upper entity in OwnershipGroup relationship!");
         }
 	}
+
+    @Override
+    public OwnershipType getOwnershipType(){
+        return OwnershipType.GROUP;
+    }
 
 }

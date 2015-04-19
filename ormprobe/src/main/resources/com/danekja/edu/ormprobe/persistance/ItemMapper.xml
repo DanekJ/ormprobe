@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.danekja.edu.ormprobe.persistance.ItemMapper">
+    <resultMap id="AllItems" type="com.danekja.edu.ormprobe.domain.Item">
+        <id property="id" column="id"/>
+        <result property="name" column="name"/>
+    </resultMap>
+
+    <select id="getAll" resultMap="AllItems">
+        SELECT id, name FROM Item
+    </select>
+
+    <select id="getById" parameterType="long" resultType="com.danekja.edu.ormprobe.domain.Item">
+        SELECT id, name FROM Item WHERE id=#{id}
+    </select>
+    
+    <delete id="delete" parameterType="long">
+        DELETE FROM Ownership WHERE lowerId = ${id} AND ownershipType = "ITEM" AND id > 0;
+        DELETE FROM Item WHERE id=#{id};
+    </delete>
+
+    <insert id="insert" parameterType="com.danekja.edu.ormprobe.domain.Item">
+        INSERT INTO Item (name) VALUES (#{name})
+    </insert>
+
+    <update id="update" parameterType="com.danekja.edu.ormprobe.domain.Item">
+        UPDATE Item SET name=#{name} WHERE id=#{id}
+    </update>
+
+    <select id="listBigGroupsItems" resultMap="AllItems">
+        SELECT DISTINCT i.* FROM Item i, Ownership o1, Ownership o2, group_table gt
+        WHERE (gt.id = ${id} AND gt.DTYPE = 'BigGroup' AND gt.id = o2.upper_id AND o2.ownershipType = 'Item' AND o2.lowerId = i.id)
+	    OR (gt.id = ${id} AND gt.DTYPE = 'BigGroup' AND gt.id = o1.upper_id AND o1.lowerId = o2.upper_id AND o1.ownershipType = 'GROUP' AND o1.lowerId = i.id)
+    </select>
+</mapper>

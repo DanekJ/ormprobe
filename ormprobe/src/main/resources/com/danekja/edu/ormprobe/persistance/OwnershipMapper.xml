@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.danekja.edu.ormprobe.persistance.OwnershipMapper">
+    <resultMap id="Lower" type="com.danekja.edu.ormprobe.domain.BaseObject">
+        <id property="id" column="lowerId"/>
+        <discriminator javaType="string" column="ownershipType">
+            <case value="GROUP" resultMap="RegularGroup"/>
+            <case value="ITEM" resultMap="Item"/>
+        </discriminator>
+    </resultMap>
+
+    <resultMap id="UpperGroup" type="com.danekja.edu.ormprobe.domain.Group">
+        <id property="id" column="upper"/>
+        <result property="name" column="name"/>
+        <result property="groupType" column="upper_type"/>
+        <discriminator javaType="string" column="upper_type">
+            <case value="Group" resultMap="RegularGroup"/>
+            <case value="BigGroup" resultMap="BigGroup"/>
+        </discriminator>
+    </resultMap>
+
+    <resultMap id="AllOwnerships" type="com.danekja.edu.ormprobe.domain.Ownership">
+        <id property="id" column="id"/>
+        <result property="lowerId" column="lowerId"/>
+        <result property="ownershipType" column="ownershipType"/>
+        <association property="lower" resultMap="Lower"/>
+        <association property="upper" resultMap="UpperGroup"/>
+        <discriminator javaType="string" column="ownershipType">
+            <case value="GROUP" resultMap="OwnershipGroup"/>
+            <case value="ITEM" resultMap="OwnershipItem"/>
+        </discriminator>
+    </resultMap>
+
+    <resultMap id="RegularGroup" type="com.danekja.edu.ormprobe.domain.Group">
+        <id column="lowerId" property="id"/>
+        <result property="name" column="group_name"/>
+    </resultMap>
+
+    <resultMap id="Item" type="com.danekja.edu.ormprobe.domain.Item">
+        <id column="lowerId" property="id"/>
+        <result property="name" column="item_name"/>
+    </resultMap>
+
+    <resultMap id="BigGroup" type="com.danekja.edu.ormprobe.domain.BigGroup"/>
+
+    <resultMap id="OwnershipGroup" type="com.danekja.edu.ormprobe.domain.OwnershipGroup" extends="AllOwnerships"/>
+    <resultMap id="OwnershipItem" type="com.danekja.edu.ormprobe.domain.OwnershipItem" extends="AllOwnerships"/>
+
+    <delete id="delete">
+        DELETE FROM Ownership WHERE id = #{id}
+    </delete>
+
+    <sql id="select">
+        SELECT o.id, lowerId, ownershipType, upper_id AS upper, g.name AS group_name, i.name AS item_name, gu.name AS name, gu.DTYPE AS upper_type
+        FROM Ownership o
+        JOIN group_table gu
+        ON gu.id = o.upper_id
+        LEFT OUTER JOIN group_table g
+        ON g.id = o.lowerId AND ownershipType = "GROUP"
+        LEFT OUTER JOIN Item i
+        ON i.id = o.lowerId AND ownershipType = "ITEM"
+    </sql>
+
+    <select id="getAll" resultMap="AllOwnerships">
+      <include refid="select"/>
+    </select>
+
+    <select id="getById" resultMap="AllOwnerships">
+        <include refid="select"/>
+        WHERE o.id = #{id}
+    </select>
+
+    <insert id="insert" parameterType="com.danekja.edu.ormprobe.domain.Ownership">
+        INSERT INTO Ownership (ownershipType, lowerId, upper_id) VALUES (#{ownershipType}, #{lower.id}, #{upper.id})
+    </insert>
+
+    <select id="isConnectedToBigGroup" resultType="boolean">
+        SELECT
+        CASE WHEN count(DISTINCT o2.id) > 0 then 'true' else 'false' end row_exists
+        FROM Item i, Ownership o1, Ownership o2
+        WHERE (o2.ownershipType = 'Item' AND o2.lowerId = ${itemId} AND o2.upper_id = ${bigGroupId})
+        OR (o1.upper_id = ${bigGroupId} AND o1.lowerId = o2.upper_id AND o1.ownershipType = 'GROUP' AND o2.lowerId = ${itemId})
+    </select>
+</mapper>
