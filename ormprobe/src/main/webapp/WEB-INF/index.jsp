@@ -20,7 +20,7 @@
         <li><a href="/i/loc.do?id=1">ListOwnerShipCandidates</a></li>
         <li><a href="/i/ictob.do?gid=1&iid=1">IsConnectedToBigGroup</a></li>
         <li><a href="/i/lbgi.do?id=1">ListBigGroupItems</a></li>
-        <li><a href="/i/libg.do">ListItemBigGroups</a></li>
+        <li><a href="/i/libg.do?id=1">ListItemBigGroups</a></li>
     </ul>
 </body>
 </html>

@@ -28,6 +28,10 @@
     <servlet-name>dispatcher</servlet-name>
     <url-pattern>/index</url-pattern>
   </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>dispatcher</servlet-name>
+    <url-pattern>/generate</url-pattern>
+  </servlet-mapping>
   <session-config>
     <session-timeout>
       30

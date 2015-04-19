@@ -66,6 +66,8 @@
   <bean id="ownershipService" class="com.danekja.edu.ormprobe.service.OwnershipService"/>
   <bean id="testDaoService" class="com.danekja.edu.ormprobe.service.TestDaoService"/>
 
+  <bean id="persistUtil" class="com.danekja.edu.ormprobe.utils.MyBatisPersistUtil" />
+
   <bean id="groupsController" class="com.danekja.edu.ormprobe.controllers.GroupsController">
     <property name="groupService" ref="groupService"/>
   </bean>
