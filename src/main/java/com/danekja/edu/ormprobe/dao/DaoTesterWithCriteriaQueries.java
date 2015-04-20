@@ -1,9 +1,6 @@
 package com.danekja.edu.ormprobe.dao;
 
-import com.danekja.edu.ormprobe.domain.BigGroup;
-import com.danekja.edu.ormprobe.domain.Group;
-import com.danekja.edu.ormprobe.domain.Item;
-import com.danekja.edu.ormprobe.domain.OwnershipGroup;
+import com.danekja.edu.ormprobe.domain.*;
 
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.TypedQuery;
@@ -45,8 +42,9 @@ public class DaoTesterWithCriteriaQueries extends DaoTester{
 		Root<OwnershipGroup> subFrom = subQuery.from(OwnershipGroup.class);
 		subQuery.select(subFrom.get("lower").<OwnershipGroup>get("id"));
 		subQuery.where(
-				builder.equal(subFrom.get("upper").get("id"), bigGroupId)
+			builder.equal(subFrom.get("upper").get("id"), bigGroupId)
 		);
+		subQuery.distinct(true);
 
 		Subquery<BigGroup> subQuery2 = query.subquery(BigGroup.class);
 		Root<BigGroup> subFrom2 = subQuery2.from(BigGroup.class);
@@ -76,7 +74,29 @@ public class DaoTesterWithCriteriaQueries extends DaoTester{
 	 */
 	@Override
 	public Set<BigGroup> listItemsBigGroups(long itemId) {
-		return null;
+		CriteriaQuery<BigGroup> query = builder.createQuery(BigGroup.class);
+		Root<BigGroup> fromBG = query.from(BigGroup.class);
+		Root<OwnershipItem> fromOI = query.from(OwnershipItem.class);
+		Root<OwnershipGroup> fromOG = query.from(OwnershipGroup.class);
+
+		CriteriaQuery<BigGroup> select = query.select(fromBG);
+		select.where(
+			builder.or(
+				builder.and(
+					builder.equal(fromBG.get("id"), fromOG.get("upper").get("id")),
+					builder.equal(fromOG.get("lower").get("id"), fromOI.get("upper").get("id")),
+					builder.equal(fromOI.get("lower").get("id"), itemId)
+				),
+				builder.and(
+					builder.equal(fromOI.get("lower").get("id"), itemId),
+					builder.equal(fromBG.get("id"), fromOI.get("upper").get("id"))
+				)
+			)
+		);
+
+		TypedQuery<BigGroup> typedQuery = em.createQuery(select.distinct(true));
+		List<BigGroup> resultList = typedQuery.getResultList();
+		return new HashSet<BigGroup>(resultList);
 	}
 
 	/**

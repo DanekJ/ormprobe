@@ -14,6 +14,11 @@ public class BigGroup extends Group {
 
 	}
 
+	public BigGroup(BigGroup bg, OwnershipItem oi){
+		this.id = bg.id;
+		this.name = bg.name;
+	}
+
 	public void finalize() throws Throwable {
 		super.finalize();
 	}
