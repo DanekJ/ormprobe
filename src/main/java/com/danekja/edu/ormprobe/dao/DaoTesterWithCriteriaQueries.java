@@ -4,14 +4,13 @@ import com.danekja.edu.ormprobe.domain.BigGroup;
 import com.danekja.edu.ormprobe.domain.Group;
 import com.danekja.edu.ormprobe.domain.Item;
 import com.danekja.edu.ormprobe.domain.OwnershipGroup;
-import org.hibernate.criterion.DetachedCriteria;
-import org.hibernate.criterion.Property;
-import org.hibernate.criterion.Restrictions;
 
 import javax.persistence.EntityManagerFactory;
-import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.*;
 import javax.persistence.metamodel.Metamodel;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -37,18 +36,34 @@ public class DaoTesterWithCriteriaQueries extends DaoTester{
 	 */
 	@Override
 	public Set<Group> listOwnershipCandidates(long bigGroupId) {
-		DetachedCriteria subquery = DetachedCriteria.forClass(OwnershipGroup.class, "og")
-			.createAlias("og.upper", "upper")
-			.add(Restrictions.eq("upper.id", bigGroupId))
-			.createAlias("og.lower", "lower")
-			.add(Restrictions.eqProperty("lower.id", "g.id"));
+		CriteriaQuery<Group> query = builder.createQuery(Group.class);
+		Root<Group> from = query.from(Group.class);
+		Path path = from.get("id");
+		CriteriaQuery<Group> select = query.select(from);
 
-		DetachedCriteria query = DetachedCriteria.forClass(Group.class, "g")
-			.add(Property.forName("g.id").notIn(subquery));
+		Subquery<OwnershipGroup> subQuery = query.subquery(OwnershipGroup.class);
+		Root<OwnershipGroup> subFrom = subQuery.from(OwnershipGroup.class);
+		subQuery.select(subFrom.get("lower").<OwnershipGroup>get("id"));
+		subQuery.where(
+				builder.equal(subFrom.get("upper").get("id"), bigGroupId)
+		);
 
+		Subquery<BigGroup> subQuery2 = query.subquery(BigGroup.class);
+		Root<BigGroup> subFrom2 = subQuery2.from(BigGroup.class);
+		subQuery2.select(subFrom2.<BigGroup>get("id"));
 
+		select.where(
+			builder.not(
+				builder.in(path).value(subQuery)
+			),
+			builder.not(
+				builder.in(path).value(subQuery2)
+			)
+		);
 
-		return new HashSet<Group>(results);
+		TypedQuery<Group> typedQuery = em.createQuery(select);
+		List<Group> resultList = typedQuery.getResultList();
+		return new HashSet<Group>(resultList);
 	}
 
 	/**
