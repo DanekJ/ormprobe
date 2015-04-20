@@ -111,7 +111,29 @@ public class DaoTesterWithCriteriaQueries extends DaoTester{
 	 */
 	@Override
 	public boolean isConnectedToBigGroup(long bigGroupId, long itemId) {
-		return false;
+		CriteriaQuery<BigGroup> query = builder.createQuery(BigGroup.class);
+		Root<BigGroup> fromBG = query.from(BigGroup.class);
+		Root<OwnershipItem> fromOI = query.from(OwnershipItem.class);
+		Root<OwnershipGroup> fromOG = query.from(OwnershipGroup.class);
+
+		CriteriaQuery<BigGroup> select = query.select(fromBG);
+		select.where(
+			builder.or(
+				builder.and(
+					builder.equal(fromOG.get("upper").get("id"), bigGroupId),
+					builder.equal(fromOG.get("lower").get("id"), fromOI.get("upper").get("id")),
+					builder.equal(fromOI.get("lower").get("id"), itemId)
+				),
+				builder.and(
+					builder.equal(fromOI.get("upper").get("id"), bigGroupId),
+					builder.equal(fromOI.get("lower").get("id"), itemId)
+				)
+			)
+		);
+
+		TypedQuery<BigGroup> typedQuery = em.createQuery(select.distinct(true));
+		List<BigGroup> resultList = typedQuery.getResultList();
+		return !resultList.isEmpty();
 	}
 
 	/**
