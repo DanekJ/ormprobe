@@ -124,6 +124,28 @@ public class DaoTesterWithCriteriaQueries extends DaoTester{
 	 */
 	@Override
 	public Set<Item> listBigGroupsItems(long bigGroupId) {
-		return null;
+		CriteriaQuery<Item> query = builder.createQuery(Item.class);
+		Root<Item> fromI = query.from(Item.class);
+		Root<OwnershipItem> fromOI = query.from(OwnershipItem.class);
+		Root<OwnershipGroup> fromOG = query.from(OwnershipGroup.class);
+
+		CriteriaQuery<Item> select = query.select(fromI);
+		select.where(
+			builder.or(
+				builder.and(
+					builder.equal(fromI.get("id"), fromOI.get("lower").get("id")),
+					builder.equal(fromOG.get("lower").get("id"), fromOI.get("upper").get("id")),
+					builder.equal(fromOG.get("upper").get("id"), bigGroupId)
+				),
+				builder.and(
+					builder.equal(fromOI.get("lower").get("id"), fromI.get("id")),
+					builder.equal(fromOI.get("upper").get("id"), bigGroupId)
+				)
+			)
+		);
+
+		TypedQuery<Item> typedQuery = em.createQuery(select.distinct(true));
+		List<Item> resultList = typedQuery.getResultList();
+		return new HashSet<Item>(resultList);
 	}
 }
