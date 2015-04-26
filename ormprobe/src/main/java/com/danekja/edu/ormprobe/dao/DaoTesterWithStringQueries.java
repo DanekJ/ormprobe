@@ -78,15 +78,16 @@ public class DaoTesterWithStringQueries extends DaoTester{
 	@Override
 	public boolean isConnectedToBigGroup(long bigGroupId, long itemId) {
 		Query iQuery = session.createQuery("SELECT DISTINCT og FROM BigGroup bg, OwnershipItem oi, OwnershipGroup og WHERE "
-                        + "(oi.upper.id = :bgId AND oi.lower.id = :itemId) OR (og.upper.id = :bgId AND og.lower.id = oi.upper.id "
+                        + "(oi.upper.id = :bgId AND oi.lower.id = :itemId AND oi.upper.class = :bgClass) OR (og.upper.id = :bgId AND og.lower.id = oi.upper.id "
                         + "AND oi.lower.id = :itemId)");
                 iQuery.setParameter("bgId", bigGroupId);
 		iQuery.setParameter("itemId", itemId);
+                iQuery.setParameter("bgClass", BigGroup.class.getSimpleName());
                 
 		List list = iQuery.list();
 		System.out.println("List size: " + list.size());
                 
-                if(list.size() != 0){
+                if(!list.isEmpty()){
                     return true;
                 }
                 else{
@@ -104,8 +105,9 @@ public class DaoTesterWithStringQueries extends DaoTester{
 	 */
 	@Override
 	public Set<Item> listBigGroupsItems(long bigGroupId) {
-            Query iQuery = session.createQuery("SELECT DISTINCT i FROM Item i, OwnershipGroup og, OwnershipItem oi WHERE (oi.upper.id = :bgId AND oi.lower.id = i.id) OR (og.upper.id = :bgId AND og.lower.id = oi.upper.id AND oi.lower.id = i.id)");
+            Query iQuery = session.createQuery("SELECT DISTINCT i FROM Item i, OwnershipGroup og, OwnershipItem oi WHERE (oi.upper.id = :bgId AND oi.lower.id = i.id AND oi.upper.class = :bgClass) OR (og.upper.id = :bgId AND og.lower.id = oi.upper.id AND oi.lower.id = i.id)");
 	        iQuery.setParameter("bgId", bigGroupId);
+                iQuery.setParameter("bgClass", BigGroup.class.getSimpleName());
                 
 		Set<Item> items = new HashSet<>(iQuery.list());
 		System.out.println("List size: " + items.size());
