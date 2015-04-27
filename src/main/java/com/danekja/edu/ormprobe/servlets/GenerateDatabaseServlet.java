@@ -15,7 +15,7 @@ import java.io.IOException;
 /**
  * @author Karel Zíbar
  */
-public class WelcomeServlet extends HttpServlet {
+public class GenerateDatabaseServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
 	}
@@ -32,5 +32,6 @@ public class WelcomeServlet extends HttpServlet {
 
 		generator.generateData(false);
 		System.out.println("====================================================================================================================");
+		response.sendRedirect("/menu");
 	}
 }

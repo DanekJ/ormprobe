@@ -55,7 +55,4 @@
 
 
   </dependencies>
-  <build>
-    <finalName>ormprobe2</finalName>
-  </build>
 </project>

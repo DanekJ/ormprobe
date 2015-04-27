@@ -7,14 +7,14 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
- * @author Karel Zíbar
+ * Created by zibby on 27.4.15.
  */
-public class FirstServlet extends HttpServlet {
+public class DaoSwitcherServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
 	}
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		System.out.println("BYL JSEM ZAVOLAN");
+
 	}
 }

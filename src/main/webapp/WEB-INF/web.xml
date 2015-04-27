@@ -7,25 +7,29 @@
 
 
     <servlet>
-        <servlet-name>FirstServlet</servlet-name>
-        <servlet-class>com.danekja.edu.ormprobe.servlets.FirstServlet</servlet-class>
+        <servlet-name>GenerateDatabaseServlet</servlet-name>
+        <servlet-class>com.danekja.edu.ormprobe.servlets.GenerateDatabaseServlet</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>WelcomeServlet</servlet-name>
-        <servlet-class>com.danekja.edu.ormprobe.servlets.WelcomeServlet</servlet-class>
+        <servlet-name>DaoSwitcherServlet</servlet-name>
+        <servlet-class>com.danekja.edu.ormprobe.servlets.DaoSwitcherServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>MenuRedirectServlet</servlet-name>
+        <servlet-class>com.danekja.edu.ormprobe.servlets.MenuRedirectServlet</servlet-class>
     </servlet>
 
 
-
-
-
     <servlet-mapping>
-        <servlet-name>FirstServlet</servlet-name>
-        <url-pattern>/first</url-pattern>
+        <servlet-name>GenerateDatabaseServlet</servlet-name>
+        <url-pattern>/home</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>WelcomeServlet</servlet-name>
-        <url-pattern>/home</url-pattern>
+        <servlet-name>DaoSwitcherServlet</servlet-name>
+        <url-pattern>/switch</url-pattern>
+    </servlet-mapping><servlet-mapping>
+        <servlet-name>MenuRedirectServlet</servlet-name>
+        <url-pattern>/menu</url-pattern>
     </servlet-mapping>
 
 
