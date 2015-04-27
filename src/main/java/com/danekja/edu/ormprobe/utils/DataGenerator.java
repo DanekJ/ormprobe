@@ -2,7 +2,7 @@ package com.danekja.edu.ormprobe.utils;
 
 import com.danekja.edu.ormprobe.domain.*;
 
-import java.util.Random;
+import java.util.*;
 
 /**
  * @author Karel Zíbar
@@ -13,6 +13,10 @@ public class DataGenerator {
 	public static final int ITEMS_COUNT = 10;
 
 	public static final int OWNERSHIPS_COUNT = 40;
+
+	Map<Long, List<Long>> map = new HashMap<Long, List<Long>>();
+
+	Map<Long, List<Long>> map2 = new HashMap<Long, List<Long>>();
 
 	private DatabasePersistUtil persistUtil;
 
@@ -27,7 +31,6 @@ public class DataGenerator {
 
 
 	public void generateData(boolean endConnection){
-
 			persistUtil.beginTransaction();
 
 			generateGroupsAndItems();
@@ -88,7 +91,22 @@ public class DataGenerator {
 				i = (Item) persistUtil.selectObjectById(Item.class, randomId);
 				oi.setLower(i);
 
-				persistUtil.persistData(oi);
+				List<Long> value = map.get(g.getId());
+				if(value == null){
+					value = new ArrayList<Long>();
+					map.put(g.getId(), value);
+					value.add(i.getId());
+					persistUtil.persistData(oi);
+				}
+				else{
+					if(value.contains(i.getId())){
+						k--;
+					}
+					else{
+						value.add(i.getId());
+						persistUtil.persistData(oi);
+					}
+				}
 			}
 
 			else{
@@ -109,7 +127,6 @@ public class DataGenerator {
 					}
 
 					og.setLower(g);
-					persistUtil.persistData(og);
 				}
 
 				else{
@@ -124,12 +141,27 @@ public class DataGenerator {
 					}
 
 					og.setUpper(g);
+				}
+
+				List<Long> value2 = map2.get(og.getUpper().getId());
+				if(value2 == null){
+					value2 = new ArrayList<Long>();
+					map2.put(og.getUpper().getId(), value2);
+					value2.add(og.getLower().getId());
 					persistUtil.persistData(og);
+				}
+				else{
+					if(value2.contains(og.getLower().getId())){
+						k--;
+					}
+					else{
+						value2.add(og.getLower().getId());
+						persistUtil.persistData(og);
+					}
 				}
 			}
 		}
 	}
-
 
 	public DatabasePersistUtil getPersistUtil() {
 		return persistUtil;
