@@ -33,11 +33,12 @@
         <hr>
 
         <label for="itemId">itemId:</label>
-        <input type="number" min="1" value="1" name="itemId" id="itemId">
+        <input type="number" min="1" value="1" name="itemId" id="itemId" required>
 
         <label for="bigGroupId">bigGroupId:</label>
-        <input type="number" min="1" value="1" name="bigGroupId" id="bigGroupId">
-
+        <input type="number" min="1" value="1" name="bigGroupId" id="bigGroupId" required>
+        <br>
+        <i>Note: If there is any ID you don't need for a query, leave it to be set to some number. It doesn't matter.</i>
         <br><br>
         <button type="submit">Send</button>
     </form>

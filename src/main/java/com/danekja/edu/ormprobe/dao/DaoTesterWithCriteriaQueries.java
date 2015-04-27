@@ -5,7 +5,6 @@ import com.danekja.edu.ormprobe.domain.*;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.*;
-import javax.persistence.metamodel.Metamodel;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -15,13 +14,11 @@ import java.util.Set;
  */
 public class DaoTesterWithCriteriaQueries extends DaoTester{
 	CriteriaBuilder builder;
-	Metamodel model;
 
 
 	public DaoTesterWithCriteriaQueries(EntityManagerFactory emf) {
 		super(emf);
 		builder = this.em.getCriteriaBuilder();
-		model = this.em.getMetamodel();
 	}
 
 
