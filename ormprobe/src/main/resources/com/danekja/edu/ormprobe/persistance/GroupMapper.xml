@@ -39,7 +39,7 @@
     </delete>
 
   <select id="listOwnershipCandidates" parameterType="long" resultMap="GroupResult">
-        SELECT g.* FROM group_table g, Ownership o
+        SELECT DISTINCT g.* FROM group_table g, Ownership o
         WHERE NOT g.DTYPE = 'BigGroup' AND NOT (o.upper_id = ${id} AND o.lowerId = g.id) AND o.ownershipType = 'GROUP' AND NOT g.id = ${id}
     </select>
 
