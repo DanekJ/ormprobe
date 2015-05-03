@@ -4,5 +4,13 @@ package com.danekja.edu.ormprobe.domain;
  * Created by witz on 5.3.15.
  */
 public class BaseObject {
-    public long id;
+  private long id;
+
+  public long getId() {
+    return id;
+  }
+
+  public void setId(long id) {
+    this.id = id;
+  }
 }
