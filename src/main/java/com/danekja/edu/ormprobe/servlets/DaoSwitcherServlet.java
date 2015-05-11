@@ -52,6 +52,6 @@ public class DaoSwitcherServlet extends HttpServlet {
 			tester.listBigGroupsItems(bigGroupId);
 		}
 
-		response.sendRedirect("/menu");
+		response.sendRedirect(request.getContextPath() + "/menu");
 	}
 }

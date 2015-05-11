@@ -91,7 +91,7 @@ public class DaoTesterWithCriteriaQueries extends DaoTester{
 			)
 		);
 
-		TypedQuery<BigGroup> typedQuery = em.createQuery(select.distinct(true));
+		TypedQuery<BigGroup> typedQuery = em.createQuery(select);
 		List<BigGroup> resultList = typedQuery.getResultList();
 		return new HashSet<BigGroup>(resultList);
 	}
@@ -128,7 +128,7 @@ public class DaoTesterWithCriteriaQueries extends DaoTester{
 			)
 		);
 
-		TypedQuery<BigGroup> typedQuery = em.createQuery(select.distinct(true));
+		TypedQuery<BigGroup> typedQuery = em.createQuery(select);
 		List<BigGroup> resultList = typedQuery.getResultList();
 		return !resultList.isEmpty();
 	}
@@ -163,7 +163,7 @@ public class DaoTesterWithCriteriaQueries extends DaoTester{
 			)
 		);
 
-		TypedQuery<Item> typedQuery = em.createQuery(select.distinct(true));
+		TypedQuery<Item> typedQuery = em.createQuery(select);
 		List<Item> resultList = typedQuery.getResultList();
 		return new HashSet<Item>(resultList);
 	}

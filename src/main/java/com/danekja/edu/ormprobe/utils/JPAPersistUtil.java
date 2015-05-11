@@ -6,6 +6,7 @@ import com.danekja.edu.ormprobe.domain.Item;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
 
 /**
@@ -77,8 +78,13 @@ public class JPAPersistUtil implements DatabasePersistUtil {
 
 			TypedQuery<Group> query = em.createQuery("SELECT g FROM Group g WHERE g.id = ?1", Group.class);
 			query.setParameter(1, id);
-			return query.getSingleResult();
-
+			try {
+				BaseObject obj = query.getSingleResult();
+				return obj;
+			}
+			catch (NoResultException e){
+				return null;
+			}
 		}
 		return null;
 	}

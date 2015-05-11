@@ -34,7 +34,7 @@ public class DaoTesterWithHQL extends DaoTester{
 
 		TypedQuery<Group> query = em.createQuery(
 			"SELECT g FROM Group g WHERE " +
-				"g.id NOT IN (SELECT DISTINCT g2.id FROM OwnershipGroup og JOIN og.lower g2 WHERE og.upper.id = ?1)" +
+				"g.id NOT IN (SELECT g2.id FROM OwnershipGroup og JOIN og.lower g2 WHERE og.upper.id = ?1)" +
 				" AND g.class != ?2", Group.class);
 
 		query.setParameter(1, bigGroupId);
@@ -55,7 +55,7 @@ public class DaoTesterWithHQL extends DaoTester{
 	@Override
 	public Set<BigGroup> listItemsBigGroups(long itemId) {
 		TypedQuery<BigGroup> query = em.createQuery(
-			"SELECT DISTINCT bg FROM BigGroup bg, OwnershipItem oi, OwnershipGroup og " +
+			"SELECT bg FROM BigGroup bg, OwnershipItem oi, OwnershipGroup og " +
 				"WHERE (bg.id = oi.upper.id AND oi.lower.id = :itemId) OR" +
 				"(bg.id = og.upper.id AND og.lower.id = oi.upper.id AND oi.lower.id = :itemId)", BigGroup.class);
 
@@ -78,7 +78,7 @@ public class DaoTesterWithHQL extends DaoTester{
 	@Override
 	public boolean isConnectedToBigGroup(long bigGroupId, long itemId) {
 		TypedQuery<Ownership> gQuery = em.createQuery(
-			"SELECT DISTINCT og FROM BigGroup bg, OwnershipItem oi, OwnershipGroup og " +
+			"SELECT og FROM BigGroup bg, OwnershipItem oi, OwnershipGroup og " +
 				"WHERE (oi.upper.id = :bgId AND oi.lower.id = :itemId) OR " +
 					"(og.upper.id = :bgId AND og.lower.id = oi.upper.id AND oi.lower.id = :itemId)", Ownership.class);
 		gQuery.setParameter("bgId", bigGroupId);
@@ -99,7 +99,7 @@ public class DaoTesterWithHQL extends DaoTester{
 	@Override
 	public Set<Item> listBigGroupsItems(long bigGroupId) {
 		TypedQuery<Item> query = em.createQuery(
-			"SELECT DISTINCT i FROM Item i, OwnershipGroup og, OwnershipItem oi " +
+			"SELECT i FROM Item i, OwnershipGroup og, OwnershipItem oi " +
 				"WHERE (oi.upper.id = :bgId AND oi.lower.id = i.id) OR " +
 					"(og.upper.id = :bgId AND og.lower.id = oi.upper.id AND oi.lower.id = i.id) ", Item.class);
 

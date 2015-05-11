@@ -16,7 +16,7 @@ public class OwnershipGroup extends Ownership<Group> {
     }
 
     @ManyToOne
-    @JoinColumn(name = "lower_id", foreignKey = @ForeignKey(value = ConstraintMode.NO_CONSTRAINT))
+    @JoinColumn(name = "lowerId", foreignKey = @ForeignKey(value = ConstraintMode.NO_CONSTRAINT))
     @Override
     public Group getLower() {
         return super.getLower();

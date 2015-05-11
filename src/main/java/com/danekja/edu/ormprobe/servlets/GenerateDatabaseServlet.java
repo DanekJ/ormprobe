@@ -16,6 +16,15 @@ import java.io.IOException;
  * @author Karel Zíbar
  */
 public class GenerateDatabaseServlet extends HttpServlet {
+	DataGenerator generator;
+
+	@Override
+	public void init() {
+		EntityManagerFactory emf = Persistence.createEntityManagerFactory("JET");
+		EntityManager em = emf.createEntityManager();
+		generator = new DataGenerator( new JPAPersistUtil(emf, em) );
+	}
+
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
 	}
@@ -24,14 +33,8 @@ public class GenerateDatabaseServlet extends HttpServlet {
 		if(request.getCharacterEncoding() == null)
 			request.setCharacterEncoding("UTF-8");
 
-		System.out.println("WELCOME SERVLET");
-
-		EntityManagerFactory emf = Persistence.createEntityManagerFactory("JET");
-		EntityManager em = emf.createEntityManager();
-		DataGenerator generator = new DataGenerator( new JPAPersistUtil(emf, em) );
-
 		generator.generateData(false);
 		System.out.println("====================================================================================================================");
-		response.sendRedirect("/menu");
+		response.sendRedirect(request.getContextPath() + "/menu");
 	}
 }
