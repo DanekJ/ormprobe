@@ -99,7 +99,7 @@ public class DaoTesterWithHQL extends DaoTester{
 	@Override
 	public Set<Item> listBigGroupsItems(long bigGroupId) {
 		TypedQuery<Item> query = em.createQuery(
-			"SELECT i FROM Item i, OwnershipGroup og, OwnershipItem oi " +
+			"SELECT DISTINCT i FROM Item i, OwnershipGroup og, OwnershipItem oi " +
 				"WHERE (oi.upper.id = :bgId AND oi.lower.id = i.id) OR " +
 					"(og.upper.id = :bgId AND og.lower.id = oi.upper.id AND oi.lower.id = i.id) ", Item.class);
 

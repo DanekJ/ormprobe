@@ -5,24 +5,28 @@
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
 
         <properties>
-            <property name="hibernate.archive.autodetection" value="class"/>
-            <property name="hibernate.show_sql" value="true"/>
-            <property name="hibernate.format_sql" value="true"/>
-            <property name="hibernate.hbm2ddl.auto" value="update"/>
+            <property name="hibernate.hbm2ddl.auto" value="validate"/>
             <property name="openjpa.jdbc.SynchronizeMappings" value="buildSchema"/>
 
             <property name="hibernate.connection.driver_class" value="com.mysql.jdbc.Driver"/>
 
-            <property name="hibernate.connection.password" value="jet"/>
-            <property name="hibernate.connection.username" value="jet"/>
-            <property name="hibernate.connection.url" value="jdbc:mysql://localhost:3306/jet_db"/>
+            <!--<property name="hibernate.connection.password" value="jet"/>-->
+            <!--<property name="hibernate.connection.username" value="jet"/>-->
+            <!--<property name="hibernate.connection.url" value="jdbc:mysql://localhost:3306/jet_db"/>-->
 
-            <!--<property name="hibernate.connection.password" value="kivjet2015"/>-->
-            <!--<property name="hibernate.connection.username" value="ormprobe"/>-->
-            <!--<property name="hibernate.connection.url" value="jdbc:mysql://localhost:3306/ormprobe"/>-->
+            <property name="hibernate.connection.password" value="kivjet2015"/>
+            <property name="hibernate.connection.username" value="ormprobe"/>
+            <property name="hibernate.connection.url" value="jdbc:mysql://localhost:3306/ormprobe?useLocalSessionState=true"/>
 
             <property name="hibernate.dialect" value="org.hibernate.dialect.MySQL5InnoDBDialect"/>
             <property name="hibernate.validator.apply_to_ddl" value="true" />
+
+            <property name="connection.provider_class" value="org.hibernate.connection.C3P0ConnectionProvider"/>
+            <property name="hibernate.c3p0.min_size" value="5"/>
+            <property name="hibernate.c3p0.max_size" value="20"/>
+            <property name="hibernate.c3p0.timeout" value="300"/>
+            <property name="hibernate.c3p0.max_statements" value="50"/>
+            <property name="hibernate.c3p0.idle_test_period" value="300"/>
 
         </properties>
     </persistence-unit>

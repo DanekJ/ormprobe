@@ -1,4 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%--<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>--%>
 <html>
 <head>
     <title></title>
@@ -7,7 +8,7 @@
 
     <h1>Choose your way, young padawan...</h1>
 
-    <form action="/switch" method="get">
+    <form method="get" action="${pageContext.request.contextPath}/switch">
         <input id="x" type="radio" name="testerType" value="HQL" checked>
         <label for="x">HQL</label>
         <br>

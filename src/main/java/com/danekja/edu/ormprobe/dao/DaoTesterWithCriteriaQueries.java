@@ -148,7 +148,7 @@ public class DaoTesterWithCriteriaQueries extends DaoTester{
 		Root<OwnershipItem> fromOI = query.from(OwnershipItem.class);
 		Root<OwnershipGroup> fromOG = query.from(OwnershipGroup.class);
 
-		CriteriaQuery<Item> select = query.select(fromI);
+		CriteriaQuery<Item> select = query.select(fromI).distinct(true);
 		select.where(
 			builder.or(
 				builder.and(
