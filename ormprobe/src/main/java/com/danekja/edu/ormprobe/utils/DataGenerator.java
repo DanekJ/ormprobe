@@ -8,11 +8,11 @@ import java.util.*;
  * @author Karel Zíbar
  */
 public class DataGenerator {
-  public static final int GROUPS_COUNT = 10;
+  public static final int GROUPS_COUNT = 500;
 
-  public static final int ITEMS_COUNT = 10;
+  public static final int ITEMS_COUNT = 500;
 
-  public static final int OWNERSHIPS_COUNT = 40;
+  public static final int OWNERSHIPS_COUNT = 3500;
 
   Map<Long, List<Long>> map = new HashMap<Long, List<Long>>();
 
@@ -28,16 +28,13 @@ public class DataGenerator {
   }
 
 
-  public void generateData(boolean endConnection) {
+  public void generateData() {
+    persistUtil.beginTransaction();
 
-    if (endConnection) {
-      persistUtil.beginTransaction();
-
-      generateGroupsAndItems();
-      generateOwnerships();
-      persistUtil.commitChanges();
-      persistUtil.endConnection();
-    }
+    generateGroupsAndItems();
+    generateOwnerships();
+    persistUtil.commitChanges();
+    persistUtil.endConnection();
 
     //	if(endConnection)
 

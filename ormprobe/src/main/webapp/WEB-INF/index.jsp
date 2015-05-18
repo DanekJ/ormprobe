@@ -7,20 +7,20 @@
 --%>
 <html>
 <head>
-    <title>Ormprobe</title>
+    <title>Mybatis</title>
 </head>
 <body>
     <h1>Groups</h1>
     <ul>
-        <li><a href="/g/a.do">All</a></li>
-        <li><a href="/g/ibg.do?id=1">Item - BigGroups</a></li>
+        <li><a href="${pageContext.request.contextPath}/g/a.do">All</a></li>
+        <li><a href="${pageContext.request.contextPath}/g/ibg.do?id=1">Item - BigGroups</a></li>
     </ul>
     <h1>TestDao</h1>
     <ul>
-        <li><a href="/i/loc.do?id=1">ListOwnerShipCandidates</a></li>
-        <li><a href="/i/ictob.do?gid=1&iid=1">IsConnectedToBigGroup</a></li>
-        <li><a href="/i/lbgi.do?id=1">ListBigGroupItems</a></li>
-        <li><a href="/i/libg.do?id=1">ListItemBigGroups</a></li>
+        <li><a href="${pageContext.request.contextPath}/i/loc.do?id=1">ListOwnerShipCandidates</a></li>
+        <li><a href="${pageContext.request.contextPath}/i/ictob.do?gid=1&iid=1">IsConnectedToBigGroup</a></li>
+        <li><a href="${pageContext.request.contextPath}/i/lbgi.do?id=1">ListBigGroupItems</a></li>
+        <li><a href="${pageContext.request.contextPath}/i/libg.do?id=1">ListItemBigGroups</a></li>
     </ul>
 </body>
 </html>

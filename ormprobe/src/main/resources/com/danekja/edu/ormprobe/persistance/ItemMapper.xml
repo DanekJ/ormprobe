@@ -32,6 +32,6 @@
         SELECT DISTINCT i.*
         FROM Item i, Ownership o1, Ownership o2
         WHERE (o1.upper_id = ${id} AND o1.ownershipType = 'Item' AND o1.lowerId = i.id)
-	        OR (o1.upper_id = ${id} AND o1.lowerId = o2.upper_id AND o1.ownershipType = 'GROUP' AND o1.lowerId = i.id)
+	        OR (o1.upper_id = ${id} AND o1.lowerId = o2.upper_id AND o1.ownershipType = 'GROUP' AND o2.lowerId = i.id)
     </select>
 </mapper>

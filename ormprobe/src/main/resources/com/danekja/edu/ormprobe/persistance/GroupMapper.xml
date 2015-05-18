@@ -39,13 +39,34 @@
     </delete>
 
   <select id="listOwnershipCandidates" parameterType="long" resultMap="GroupResult">
-        SELECT DISTINCT g.* FROM group_table g, Ownership o
-        WHERE NOT g.DTYPE = 'BigGroup' AND NOT (o.upper_id = ${id} AND o.lowerId = g.id) AND o.ownershipType = 'GROUP' AND NOT g.id = ${id}
+SELECT
+    g.*,
+    SUM(CASE
+        WHEN o.upper_id = #{id} AND o.lowerId = g.id AND o.ownershipType = 'Group' THEN 1
+        ELSE 0
+    END) AS suma
+FROM
+    group_table g
+        LEFT JOIN
+    Ownership o ON g.id = o.lowerId
+WHERE
+    g.DTYPE = 'Group'
+GROUP BY g.id
+HAVING suma = 0
     </select>
 
   <select id="listItemsBigGroups" parameterType="long" resultMap="BigGroup">
-        SELECT DISTINCT gt.* FROM Item i, Ownership o1, Ownership o2, group_table gt
-        WHERE (gt.id = o2.upper_id AND gt.DTYPE = 'BigGroup' AND o2.ownershipType = 'Item' AND o2.lowerId = ${id})
-	    OR (gt.id = o1.upper_id AND gt.DTYPE = 'BigGroup' AND o1.lowerId = o2.upper_id AND o1.ownershipType = "GROUP" AND o2.lowerId = ${id})
+SELECT
+    g.*
+FROM
+	group_table g
+    CROSS JOIN Ownership o1
+    CROSS JOIN Ownership o2
+    WHERE o1.ownershipType = 'ITEM'
+    AND g.DTYPE = 'BigGroup'
+    AND o2.ownershipType = 'GROUP'
+	AND ((o1.upper_id = g.id AND o1.lowerId = #{id})
+		OR (o1.lowerId = #{id} AND o2.upper_id = g.id AND o2.lowerId = o1.upper_id))
+group by g.id
     </select>
 </mapper>

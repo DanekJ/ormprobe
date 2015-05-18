@@ -26,7 +26,7 @@ CREATE TABLE `Item` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -35,7 +35,7 @@ CREATE TABLE `Item` (
 
 LOCK TABLES `Item` WRITE;
 /*!40000 ALTER TABLE `Item` DISABLE KEYS */;
-INSERT INTO `Item` VALUES (1,'Bar');
+#INSERT INTO `Item` VALUES (1,'Bar');
 /*!40000 ALTER TABLE `Item` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -56,7 +56,7 @@ CREATE TABLE `Ownership` (
   KEY `FK_nfr09277a3me7vw150itx236t` (`lowerId`),
   CONSTRAINT `FK_nfr09277a3me7vw150itx236t` FOREIGN KEY (`lowerId`) REFERENCES `group_table` (`id`),
   CONSTRAINT `FK_45xtmlb94m9f7vjkcshldutky` FOREIGN KEY (`upper_id`) REFERENCES `group_table` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -65,7 +65,7 @@ CREATE TABLE `Ownership` (
 
 LOCK TABLES `Ownership` WRITE;
 /*!40000 ALTER TABLE `Ownership` DISABLE KEYS */;
-INSERT INTO `Ownership` VALUES ('ITEM',1,1,1);
+#INSERT INTO `Ownership` VALUES ('ITEM',1,1,1);
 /*!40000 ALTER TABLE `Ownership` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -81,7 +81,7 @@ CREATE TABLE `group_table` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -90,7 +90,7 @@ CREATE TABLE `group_table` (
 
 LOCK TABLES `group_table` WRITE;
 /*!40000 ALTER TABLE `group_table` DISABLE KEYS */;
-INSERT INTO `group_table` VALUES ('Group',1,'Fuu');
+#INSERT INTO `group_table` VALUES ('Group',1,'Fuu');
 /*!40000 ALTER TABLE `group_table` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;

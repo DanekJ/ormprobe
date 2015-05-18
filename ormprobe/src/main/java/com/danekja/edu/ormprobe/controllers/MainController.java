@@ -30,7 +30,7 @@ public class MainController {
   @RequestMapping(value = "generate")
   public ModelAndView generateData() {
     DataGenerator dataGenerator = new DataGenerator(persistUtil);
-    dataGenerator.generateData(false);
+    dataGenerator.generateData();
     return new ModelAndView("index");
   }
 }

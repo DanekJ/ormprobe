@@ -31,9 +31,9 @@
   <bean id="dataSource"
         class="com.mchange.v2.c3p0.ComboPooledDataSource">
     <property name="driverClass" value="com.mysql.jdbc.Driver"/>
-    <property name="jdbcUrl" value="jdbc:mysql://localhost:3306/jet?allowMultiQueries=true&amp;useLocalSessionState=true"/>
-    <property name="user" value="jet"/>
-    <property name="password" value="jet"/>
+    <property name="jdbcUrl" value="jdbc:mysql://localhost:3306/ormprobe?allowMultiQueries=true&amp;useLocalSessionState=true"/>
+    <property name="user" value="ormprobe"/>
+    <property name="password" value="kivjet2015"/>
   </bean>
   <!-- in-memory database and a datasource -->
   <!--jdbc:initialize-database data-source="dataSource">
