@@ -22,13 +22,13 @@ public class App {
 //        Set<BaseObject> result2 = new HashSet<BaseObject>();
 ////        result = new HashSet<BaseObject>(tester.listOwnershipCandidates(8L));
 ////        result = new HashSet<BaseObject>(tester.listItemsBigGroups(5L));
-//        System.out.println(tester.isConnectedToBigGroup(9L, 5L));
+////        System.out.println(tester.isConnectedToBigGroup(9L, 5L));
 ////        result = new HashSet<BaseObject>(tester.listBigGroupsItems(8L));
 //
 ////        result2 = new HashSet<BaseObject>(tester2.listOwnershipCandidates(8L));
 ////        result2 = new HashSet<BaseObject>(tester2.listItemsBigGroups(5L));
-//        System.out.println(tester2.isConnectedToBigGroup(9L, 5L));
-////        result2 = new HashSet<BaseObject>(tester2.listBigGroupsItems(8L));
+////        System.out.println(tester2.isConnectedToBigGroup(9L, 5L));
+//        result2 = new HashSet<BaseObject>(tester2.listBigGroupsItems(8L));
 //
 //        System.out.println("------------------------------------------------------------------------");
 //        for (BaseObject g : result)
