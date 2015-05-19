@@ -4,17 +4,19 @@
   <session-factory>
     <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
     <property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
-    <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/mydb</property>
-    <property name="hibernate.connection.username">jet</property>
-    <property name="hibernate.connection.password">jet</property>
+    <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/ormprobe</property>
+    <property name="hibernate.connection.username">ormprobe</property>
+    <property name="hibernate.connection.password">kivjet2015</property>
     <property name="hbm2ddl.auto">update</property>
+    
+    <property name="hibernate.connection.provider_class">org.hibernate.connection.C3P0ConnectionProvider</property>
 
-    <mapping class="Group" />
-    <mapping class="Item" />
-    <mapping class="BigGroup" />
-    <mapping class="Ownership" />
-    <mapping class="OwnershipGroup" />
-    <mapping class="OwnershipItem" />
+    <mapping class="com.danekja.edu.ormprobe.domain.Group" />
+    <mapping class="com.danekja.edu.ormprobe.domain.Item" />
+    <mapping class="com.danekja.edu.ormprobe.domain.BigGroup" />
+    <mapping class="com.danekja.edu.ormprobe.domain.Ownership" />
+    <mapping class="com.danekja.edu.ormprobe.domain.OwnershipGroup" />
+    <mapping class="com.danekja.edu.ormprobe.domain.OwnershipItem" />
             
   </session-factory>
 </hibernate-configuration>

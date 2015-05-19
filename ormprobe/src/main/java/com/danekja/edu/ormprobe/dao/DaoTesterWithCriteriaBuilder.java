@@ -6,6 +6,7 @@ import com.danekja.edu.ormprobe.domain.Item;
 import com.danekja.edu.ormprobe.domain.OwnershipGroup;
 import com.danekja.edu.ormprobe.domain.OwnershipItem;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 
 import javax.persistence.EntityManagerFactory;
@@ -53,7 +54,7 @@ public class DaoTesterWithCriteriaBuilder extends DaoTester{
             crit.add(Subqueries.propertyNotIn("id", inOg));
             crit.add(Restrictions.ne("Group.class", BigGroup.class.getSimpleName()));
             
-                Set<Group> groups = new HashSet<>(crit.list());
+                Set<Group> groups = new HashSet(crit.list());
 		return groups;
 	}
 
@@ -73,7 +74,7 @@ public class DaoTesterWithCriteriaBuilder extends DaoTester{
             
             DetachedCriteria inOg = DetachedCriteria.forClass(OwnershipGroup.class);
             inOg.add(Subqueries.propertyIn("lower.id", inOi));
-            inOg.setProjection(Projections.property("upper.id"));
+            inOg.setProjection(Projections.property("upper.id")); 
             
             DetachedCriteria inOi1 = DetachedCriteria.forClass(OwnershipItem.class);
             inOi1.add(Restrictions.eq("lower.id", itemId));
@@ -84,7 +85,7 @@ public class DaoTesterWithCriteriaBuilder extends DaoTester{
             Criterion s2 = Subqueries.propertyIn("id", inOg);
             
             c.add(Restrictions.or(s1, s2));
-            Set<BigGroup> groups = new HashSet<>(c.list());
+            Set<BigGroup> groups = new HashSet(c.list());
 		return groups;
 	}
 
@@ -104,10 +105,11 @@ public class DaoTesterWithCriteriaBuilder extends DaoTester{
             inOg.add(Restrictions.eq("upper.id", bigGroupId));
             inOg.setProjection(Projections.property("lower.id"));
             
-            Criteria c = session.createCriteria(OwnershipItem.class);
-            Criterion cr = Restrictions.and(Restrictions.eq("upper.id", bigGroupId), Restrictions.eq("upper", BigGroup.class));
-            Criterion or = (Restrictions.or(Subqueries.propertyIn("upper.id", inOg), cr));
-            c.add(Restrictions.and(or, Restrictions.eq("lower.id", itemId)));
+            Criteria c = session.createCriteria(OwnershipItem.class, "oi");
+            c.createAlias("oi.upper", "up");
+            Criterion cr = Restrictions.and(Restrictions.eq("up.id", bigGroupId), Restrictions.in("up.class", Arrays.asList(BigGroup.class.getSimpleName())));
+            Criterion or = (Restrictions.or(Subqueries.propertyIn("up.id", inOg), cr));
+            c.add(Restrictions.and(or, Restrictions.eq("oi.lower.id", itemId)));
             
             if(c.list().isEmpty()){
                 return false;
@@ -131,15 +133,13 @@ public class DaoTesterWithCriteriaBuilder extends DaoTester{
             inOg.add(Restrictions.eq("upper.id", bigGroupId));
             inOg.setProjection(Projections.property("lower.id"));
             
-            DetachedCriteria crit = DetachedCriteria.forClass(OwnershipItem.class);
-            Criterion cr = Restrictions.and(Restrictions.eq("upper.id", bigGroupId), Restrictions.eq("upper", BigGroup.class));
+            Criteria crit = session.createCriteria(OwnershipItem.class, "oi");
+            crit.createAlias("oi.upper", "up");
+            Criterion cr = Restrictions.and(Restrictions.eq("upper.id", bigGroupId), Restrictions.in("up.class", Arrays.asList(BigGroup.class.getSimpleName())));
+            
             crit.add(Restrictions.or(Subqueries.propertyIn("upper.id", inOg), cr));
-            crit.setProjection(Projections.property("lower.id"));
-            
-            Criteria c = session.createCriteria(Item.class);
-            c.add(Subqueries.propertyIn("id", crit));
-            
-            Set<Item> items = new HashSet<>(c.list());
-		return items;
+            crit.setProjection(Projections.property("oi.lower"));
+            Set<Item> items = new HashSet(crit.list());
+            return items;
 	}
 }

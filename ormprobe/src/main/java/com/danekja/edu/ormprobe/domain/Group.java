@@ -20,7 +20,7 @@ import javax.persistence.Transient;
 @Table(name = "group_table")
 @Inheritance(strategy=InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(
-    name="Type",
+    name="DTYPE",
     discriminatorType=DiscriminatorType.STRING
 )
 @DiscriminatorValue(value="Group")

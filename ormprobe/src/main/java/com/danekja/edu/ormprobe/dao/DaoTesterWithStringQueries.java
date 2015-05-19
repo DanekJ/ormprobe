@@ -39,7 +39,7 @@ public class DaoTesterWithStringQueries extends DaoTester{
                 iQuery.setLong(0, bigGroupId);
                 iQuery.setString(1, BigGroup.class.getSimpleName());
                 
-		Set<Group> groups = new HashSet<>(iQuery.list());
+		Set<Group> groups = new HashSet(iQuery.list());
 		System.out.println("List size: " + groups.size());
 		return groups;
 	}
@@ -60,7 +60,7 @@ public class DaoTesterWithStringQueries extends DaoTester{
             iQuery.setLong(0, itemId);
             iQuery.setLong(1, itemId);
                 
-		Set<BigGroup> groups = new HashSet<>(iQuery.list());
+		Set<BigGroup> groups = new HashSet(iQuery.list());
 		System.out.println("List size: " + groups.size());
 		return groups;
 	}
@@ -109,7 +109,7 @@ public class DaoTesterWithStringQueries extends DaoTester{
 	        iQuery.setParameter("bgId", bigGroupId);
                 iQuery.setParameter("bgClass", BigGroup.class.getSimpleName());
                 
-		Set<Item> items = new HashSet<>(iQuery.list());
+		Set<Item> items = new HashSet(iQuery.list());
 		System.out.println("List size: " + items.size());
 		return items;
 	}

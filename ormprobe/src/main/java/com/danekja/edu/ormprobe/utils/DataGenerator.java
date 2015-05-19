@@ -8,14 +8,15 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * 
  * @author Karel Zíbar
  */
 public class DataGenerator {
-	public static final int GROUPS_COUNT = 10;
+	public static final int GROUPS_COUNT = 1000;
 
-	public static final int ITEMS_COUNT = 10;
+	public static final int ITEMS_COUNT = 1000;
 
-	public static final int OWNERSHIPS_COUNT = 40;
+	public static final int OWNERSHIPS_COUNT = 1500;
         
         Map<Long, List<Long>> map = new HashMap<Long, List<Long>>();
         
@@ -39,6 +40,8 @@ public class DataGenerator {
 		persistUtil.beginTransaction();
 
 		generateGroupsAndItems();
+                persistUtil.commitChanges();
+                persistUtil.beginTransaction();
 		generateOwnerships();
 		persistUtil.commitChanges();
                 persistUtil.endConnection();
@@ -101,16 +104,16 @@ public class DataGenerator {
                             List<Long> value = map.get(g.getId());
                             if(value == null){
                                 value = new ArrayList<Long>();
-                                map.put(g.getId(), value);
-                                value.add(i.getId());
+                                map.put(oi.getUpper().getId(), value);
+                                value.add(oi.getLower().getId());
                                 persistUtil.persistData(oi);
                             }
                             else{
-                                if(value.contains(i.getId())){
+                                if(value.contains(oi.getLower().getId())){
                                     k--;
                                 }
                                 else{
-                                    value.add(i.getId());
+                                    value.add(oi.getLower().getId());
                                     persistUtil.persistData(oi);
                                 }
                             }

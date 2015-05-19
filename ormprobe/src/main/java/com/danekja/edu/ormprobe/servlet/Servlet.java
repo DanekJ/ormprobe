@@ -35,15 +35,12 @@ public class Servlet extends HttpServlet {
     Long item;
     
     public void init(ServletConfig config) throws ServletException {
-		super.init(config);
-                AnnotationConfiguration cfg=new AnnotationConfiguration();
+	super.init(config);
+        AnnotationConfiguration cfg=new AnnotationConfiguration();
         cfg.configure("hibernate.cfg.xml");
         SessionFactory factory = cfg.buildSessionFactory();
-        DataGenerator generator = new DataGenerator( new SessionPersistUtil(factory) );
         tester = new DaoTesterWithStringQueries(factory);
         dcb = new DaoTesterWithCriteriaBuilder(factory);
-
-        generator.generateData(true);
     }
         /**
          * Servlet vytvoĹ™Ă­ novĂ©ho uĹľivatele s nulovĂ˝mi parametry a id, dĂ­ky kterĂ©mu je anonymĹŻm umoĹľnÄ›no nakupovat
